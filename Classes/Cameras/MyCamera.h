@@ -1,4 +1,3 @@
-#include "../Models/Shader.h"
 #pragma once
 
 class MyCamera {

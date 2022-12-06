@@ -1,5 +1,4 @@
 #include "Model3D.h"
-
 #pragma once
 
 class MainModel : public Model3D {

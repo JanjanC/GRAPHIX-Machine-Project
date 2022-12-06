@@ -1,5 +1,4 @@
 #include "Shader.h"
-
 #pragma once
 
 //Model3D class stores the transformation properties of a model

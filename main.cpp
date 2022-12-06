@@ -23,19 +23,16 @@
 #define WIDTH 600.0f
 #define HEIGHT 600.0f
 
+/* Model Class */
 #include "Classes/Models/MainModel.h"
+
+/* Camera Classes */
 #include "Classes/Cameras/PerspectiveCamera.h"
 #include "Classes/Cameras/OrthoCamera.h"
 
+/* Light Classes */
 #include "Classes/Light/DirectionalLight.h"
 #include "Classes/Light/PointLight.h"
-//----------CLASSES----------
-
-
-
-
-
-
 
 class Environment {
 

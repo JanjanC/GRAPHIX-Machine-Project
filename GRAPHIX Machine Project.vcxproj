@@ -146,6 +146,7 @@
     <ClInclude Include="Classes\Models\MainModel.h" />
     <ClInclude Include="Classes\Models\Model3D.h" />
     <ClInclude Include="Classes\Models\Shader.h" />
+    <ClInclude Include="Classes\Models\Skybox.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
@@ -166,6 +167,8 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\GRAPHIX\Quiz03-Chua_JohnVincent\Src\Shaders\skybox.frag" />
+    <None Include="..\..\GRAPHIX\Quiz03-Chua_JohnVincent\Src\Shaders\skybox.vert" />
     <None Include="Shaders\sample.frag" />
     <None Include="Shaders\sample.vert" />
     <None Include="Shaders\sphere.frag" />

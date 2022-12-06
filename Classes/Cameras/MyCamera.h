@@ -7,6 +7,8 @@ public:
     glm::vec3 target; //position of the target in the world
     glm::vec3 up; //the world up vector
     float distance; //distance from the camera to the target
+    glm::mat4 viewMatrix;
+    glm::mat4 projectionMatrix;
 
     //constructor for the camera class
     MyCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) {
@@ -21,7 +23,7 @@ public:
         shader.useProgram();
 
         //computes for the view matrix
-        glm::mat4 viewMatrix = glm::lookAt(position, target, up);
+        viewMatrix = glm::lookAt(position, target, up);
 
         //set the value of the view matrix in the shader
         unsigned int viewLoc = glGetUniformLocation(shader.shaderProgram, "view");

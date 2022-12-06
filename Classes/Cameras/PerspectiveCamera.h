@@ -22,7 +22,7 @@ public:
         shader.useProgram();
 
         //compute for the projection matrix
-        glm::mat4 projection_matrix = glm::perspective(
+        projectionMatrix = glm::perspective(
             glm::radians(45.0f),
             WIDTH / HEIGHT,
             0.1f,
@@ -31,7 +31,7 @@ public:
 
         //set the value of the projection matrix in the shader
         unsigned int projectionLoc = glGetUniformLocation(shader.shaderProgram, "projection");
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     }
 
     //process the mouse inputs and updates the object attributes

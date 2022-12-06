@@ -25,6 +25,7 @@
 
 /* Model Class */
 #include "Classes/Models/MainModel.h"
+#include "Classes/Models/Skybox.h"
 
 /* Camera Classes */
 #include "Classes/Cameras/PerspectiveCamera.h"
@@ -38,14 +39,17 @@ class Environment {
 
 public:
     MainModel* mainModel;
+    Skybox *skybox;
     PointLight* pointLight;
     DirectionalLight* directionalLight;
     Shader* mainShader;
     Shader* sphereShader;
+    Shader* skyboxShader;
     PerspectiveCamera* perspectiveCamera;
     OrthoCamera* orthoCamera;
+    MyCamera* activeCamera;
 
-    int activeCamera = 0;
+    int cameraIndex = 0;
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
@@ -53,6 +57,8 @@ public:
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
         mainModel = new MainModel("3D/bird.obj", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         mainModel->loadTexture("3D/bird.jpg");
+
+        skybox = new Skybox("Skybox/rainbow_rt.png", "Skybox/rainbow_lf.png", "Skybox/rainbow_up.png", "Skybox/rainbow_dn.png", "Skybox/rainbow_ft.png", "Skybox/rainbow_bk.png");
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
@@ -67,11 +73,16 @@ public:
         //load the shader for the point light
         sphereShader = new Shader("Shaders/sphere.vert", "Shaders/sphere.frag");
 
+        //load the shader for the skybox
+        skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
+
         //create a perspective camera
         perspectiveCamera = new PerspectiveCamera(glm::vec3(0, 0, 10.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
         orthoCamera = new OrthoCamera(glm::vec3(0, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
+
+        activeCamera = perspectiveCamera;
     }
     
     //destructor for the environment class
@@ -90,25 +101,11 @@ public:
     void update() {
 
         //updates the uniform values
-        if (activeCamera == 0) {
-            perspectiveCamera->setViewMatrix(*mainShader);
-            perspectiveCamera->setProjectionMatrix(*mainShader);
-
-            perspectiveCamera->setViewMatrix(*sphereShader);
-            perspectiveCamera->setProjectionMatrix(*sphereShader);
-
-            perspectiveCamera->setCameraPosition(*mainShader);
-        }
-
-        if (activeCamera == 1) {
-            orthoCamera->setViewMatrix(*mainShader);
-            orthoCamera->setProjectionMatrix(*mainShader);
-
-            orthoCamera->setViewMatrix(*sphereShader);
-            orthoCamera->setProjectionMatrix(*sphereShader);
-
-            orthoCamera->setCameraPosition(*mainShader);
-        }
+        activeCamera->setViewMatrix(*mainShader);
+        activeCamera->setProjectionMatrix(*mainShader);
+        activeCamera->setViewMatrix(*sphereShader);
+        activeCamera->setProjectionMatrix(*sphereShader);
+        activeCamera->setCameraPosition(*mainShader);
 
         pointLight->setCustomColor(*sphereShader);
 
@@ -127,9 +124,14 @@ public:
         directionalLight->setLightIntensity(*mainShader);
         directionalLight->setLightDirection(*mainShader);
 
+        //TODO: clean up later
+        skybox->setViewMatrix(*skyboxShader, perspectiveCamera->viewMatrix);
+        skybox->setProjectionMatrix(*skyboxShader, perspectiveCamera->projectionMatrix);
+
         //draws the objects on the screens
         mainModel->draw(*mainShader);
         pointLight->draw(*sphereShader);
+        skybox->draw(*skyboxShader);
     }
 };
 
@@ -167,17 +169,17 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 
     //change the camera view
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
-        environment->activeCamera = 0;
+        environment->activeCamera = environment->perspectiveCamera;
     }
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
-        environment->activeCamera = 1;
+        environment->activeCamera = environment->orthoCamera;
     }
 }
 
 //callback function for cursor movement
 void Mouse_Callback(GLFWwindow* window, double xPos, double yPos) {
-    if (environment->activeCamera == 0) {
+    if (environment->activeCamera == environment->perspectiveCamera) {
         environment->perspectiveCamera->processMouse(xPos, yPos);
     }
 }

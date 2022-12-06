@@ -137,6 +137,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Classes\Models\MainModel.h" />
+    <ClInclude Include="Classes\Models\Model3D.h" />
+    <ClInclude Include="Classes\Models\Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>

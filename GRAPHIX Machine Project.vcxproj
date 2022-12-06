@@ -137,6 +137,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Classes\Cameras\MyCamera.h" />
+    <ClInclude Include="Classes\Cameras\OrthoCamera.h" />
+    <ClInclude Include="Classes\Cameras\PerspectiveCamera.h" />
     <ClInclude Include="Classes\Models\MainModel.h" />
     <ClInclude Include="Classes\Models\Model3D.h" />
     <ClInclude Include="Classes\Models\Shader.h" />

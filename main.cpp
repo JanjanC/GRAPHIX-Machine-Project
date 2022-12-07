@@ -161,7 +161,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     /* Player Control Movement */
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
         /* Insert a flag for the camera being used e.g. camera is 1st person or 3rd person */
-        if (true) {
+        if (environment->activeCamera == environment->perspectiveCamera) {
             environment->mainModel->processKeyboard(key);
         }
     }

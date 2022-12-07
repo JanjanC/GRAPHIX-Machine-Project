@@ -206,15 +206,19 @@ public:
         //bind the texture at index i
         glBindTexture(GL_TEXTURE_2D, texture);
 
+        GLenum format;
+        if (color_channels == 3) format = GL_RGB; 
+        if (color_channels == 4) format = GL_RGBA;
+
         //assign the loaded texture
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RGB, //GL_RGB - jpgs / pngs without alpha, GL_RGBA - png or images with alpha
+            format,
             img_width,
             img_height,
             0,
-            GL_RGB,
+            format,
             GL_UNSIGNED_BYTE,
             tex_bytes
         );

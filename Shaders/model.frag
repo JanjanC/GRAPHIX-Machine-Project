@@ -155,7 +155,7 @@ void main () {
     vec3 total; //stores the sum of the lights
     
     //calculate directional light
-    //total += calculateDirectionalLight(directionalLight);
+    total += calculateDirectionalLight(directionalLight);
 
     //calculate spot light
     total += calculateSpotLight(spotLight);

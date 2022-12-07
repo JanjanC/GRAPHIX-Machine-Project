@@ -75,10 +75,10 @@ public:
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
-        spotLight = new SpotLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), 12.5);
+        spotLight = new SpotLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), 12.5);
 
         //create a directional light with a position of (4, 11, -3)
-        directionalLight = new DirectionalLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
+        directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
 
         //create a third person perspective camera
         thirdPerspectiveCamera = new PerspectiveCamera(mainModel->position - 5.0f * mainModel->direction, mainModel->position, glm::vec3(0, 1.0f, 0));
@@ -179,26 +179,18 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         }
     }
 
-    //select and deselect the point light
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        environment->spotLight->processKeyboard(key);
-    }
-
-    //increase and decrease the light intensity
-    if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN || key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+    //cycle the light intensity
+    if (key == GLFW_KEY_F && action == GLFW_PRESS) {
         environment->spotLight->processKeyboard(key);
     }
 
     //change the camera view
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
-        printf("im in");
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
-            printf("first");
             environment->activeCamera = environment->thirdPerspectiveCamera;
         } 
         else
         if (environment->activeCamera == environment->thirdPerspectiveCamera) {
-            printf("third");
             environment->activeCamera = environment->firstPerspectiveCamera;
         }
     }

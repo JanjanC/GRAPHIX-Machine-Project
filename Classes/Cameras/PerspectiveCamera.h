@@ -6,6 +6,8 @@ class PerspectiveCamera : public MyCamera {
 public:
     float xLast, yLast; //stores the last cursor position
     bool isInitialized;//checks if the values of xLast and yLast have been initialized
+
+    glm::vec3 front;
     float pitch; //the rotation of the camera around the x axis
     float yaw; //the rotation of the camera around the y axis
 
@@ -14,7 +16,7 @@ public:
         xLast = yLast = 0.0f;
         isInitialized = false;
         pitch = 0.0f;
-        yaw = 90.0f;
+        yaw = -90.0f;
     }
 
     //set the value of the projection matrix in the shader
@@ -32,6 +34,10 @@ public:
         //set the value of the projection matrix in the shader
         unsigned int projectionLoc = glGetUniformLocation(shader.shaderProgram, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+    }
+
+    void update(glm::vec3 position) {
+        this->position = position + glm::vec3(0, 0, 10);
     }
 
     //process the mouse inputs and updates the object attributes
@@ -67,15 +73,23 @@ public:
             pitch = 89.99f;
         }
 
-        //recompute the position of the camera depending on the values of yaw and pitch
-        glm::vec3 newPosition;
-        newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
-        newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
-        newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
+        ////recompute the position of the camera depending on the values of yaw and pitch
+        //glm::vec3 newPosition;
+        //newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
+        //newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
+        //newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
 
-        newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
+        //newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
 
-        //update the camera position
-        position = newPosition;
+        ////update the camera position
+        //position = newPosition;
+
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
+        front.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the y component is influenced by the y component of the yaw and the x component of the pitch
+
+        front = glm::normalize(front); //ensure that the distance between the camera and the target relative to the camera position is always 1 unit
+    
+        //target = position + 10.0f * front;
     }
 };

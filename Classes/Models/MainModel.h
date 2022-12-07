@@ -18,12 +18,7 @@ public:
         if (key == GLFW_KEY_Q || key == GLFW_KEY_E) {
             /*Elevate*/
             if (key == GLFW_KEY_Q && position.y) {
-                if (position.y + vert_sensitivity >= 0) {
-                    position.y = 0;
-                }
-                else {
-                    position.y += vert_sensitivity;
-                }                
+                position.y = glm::min(position.y + vert_sensitivity, 0.0f);
             }
             /*Descend*/
             if (key == GLFW_KEY_E) {

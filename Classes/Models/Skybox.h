@@ -155,7 +155,7 @@ public:
         sky_view = glm::mat4(glm::mat3(viewMatrix));
 
         float scale_x, scale_y, scale_z;
-        scale_x = scale_y = scale_z = 50.0f;
+        scale_x = scale_y = scale_z = HEIGHT/50 + 2.0f;
 
         sky_view = glm::scale(sky_view, glm::vec3(scale_x, scale_y, scale_z));
 

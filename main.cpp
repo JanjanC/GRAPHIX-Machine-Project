@@ -33,7 +33,7 @@
 
 /* Light Classes */
 #include "Classes/Light/DirectionalLight.h"
-#include "Classes/Light/PointLight.h"
+#include "Classes/Light/SpotLight.h"
 
 class Environment {
 

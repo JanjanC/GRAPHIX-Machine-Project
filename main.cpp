@@ -24,7 +24,7 @@
 #define HEIGHT 600.0f
 
 /* Model Class */
-#include "Classes/Models/MainModel.h"
+#include "Classes/Models/Model.h"
 #include "Classes/Models/Skybox.h"
 
 /* Camera Classes */

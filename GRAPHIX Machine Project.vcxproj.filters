@@ -32,10 +32,7 @@
     <ClInclude Include="Classes\Models\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Classes\Models\Model3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\Models\MainModel.h">
+    <ClInclude Include="Classes\Models\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Cameras\MyCamera.h">

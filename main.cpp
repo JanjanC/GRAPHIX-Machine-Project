@@ -63,9 +63,9 @@ public:
 
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        mainModel = new Player("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        mainModel->loadTexture("3D/bird.jpg", *mainShader, "tex0");
-        mainModel->loadTexture("3D/bird_normal.jpg", *mainShader, "norm_tex");
+        mainModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
+        mainModel->loadTexture("3D/submarine_texture.png", *mainShader, "tex0");
+        mainModel->loadTexture("3D/submarine_normal.png", *mainShader, "norm_tex");
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         otherModel->loadTexture("3D/ayaya.png", *mainShader, "tex0");

@@ -45,7 +45,6 @@ public:
     SpotLight* spotLight;
     DirectionalLight* directionalLight;
     Shader* mainShader;
-    Shader* sphereShader;
     Shader* skyboxShader;
     PerspectiveCamera* thirdPerspectiveCamera;
     PerspectiveCamera* firstPerspectiveCamera;
@@ -58,9 +57,6 @@ public:
 
         //load the shader for the main object
         mainShader = new Shader("Shaders/bird.vert", "Shaders/bird.frag");
-
-        //load the shader for the point light
-        sphereShader = new Shader("Shaders/sphere.vert", "Shaders/sphere.frag");
 
         //load the shader for the skybox
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
@@ -107,7 +103,6 @@ public:
         delete spotLight;
         delete directionalLight;
         delete mainShader;
-        delete sphereShader;
         delete thirdPerspectiveCamera;
         delete orthoCamera;
     }
@@ -121,8 +116,6 @@ public:
         //updates the uniform values
         activeCamera->setViewMatrix(*mainShader);
         activeCamera->setProjectionMatrix(*mainShader);
-        activeCamera->setViewMatrix(*sphereShader);
-        activeCamera->setProjectionMatrix(*sphereShader);
         activeCamera->setCameraPosition(*mainShader);
 
         spotLight->updateFields(mainModel->position, mainModel->direction);
@@ -143,7 +136,6 @@ public:
         directionalLight->setLightIntensity(*mainShader);
         directionalLight->setLightDirection(*mainShader);
 
-        //TODO: clean up later
         skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
         skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
 

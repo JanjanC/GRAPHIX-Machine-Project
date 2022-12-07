@@ -72,7 +72,7 @@ public:
         otherModel->loadTexture("3D/ayaya.png", *mainShader, "tex0");
         //otherModel->loadTexture("3D/bird_normal.jpg", *mainShader, "norm_tex");
 
-        skybox = new Skybox("Skybox/rainbow_rt.png", "Skybox/rainbow_lf.png", "Skybox/rainbow_up.png", "Skybox/rainbow_dn.png", "Skybox/rainbow_ft.png", "Skybox/rainbow_bk.png");
+        skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
@@ -266,10 +266,10 @@ int main(void)
 
     //set callbacks for key presses and cursor movement
     glfwSetKeyCallback(window, Key_Callback);
-    //glfwSetCursorPosCallback(window, Mouse_Callback);
+    glfwSetCursorPosCallback(window, Mouse_Callback);
 
     //prevent the mouse from going out the window
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     //create an environment object which stores the models, lights, shaders, and cameras
     environment = new Environment();

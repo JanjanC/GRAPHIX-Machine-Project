@@ -1,9 +1,10 @@
 #include "Light.h"
 #pragma once
 
-class SpotLight : public Light, public Model3D {
+class SpotLight : public Light {
 
 public:
+    glm::vec3 position;
     glm::vec3 direction;
     float cutoff;
 
@@ -19,9 +20,10 @@ public:
     int intensityLevel;
 
     //constructor for the point light class
-    SpotLight(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta, float ambientStr, float specStr, float specPhong, glm::vec3 lightColor, float lightIntensity, glm::vec3 direction, float cutoff) :
-        Light(ambientStr, specStr, specPhong, lightColor, lightIntensity), Model3D(modelPath, position, scale, theta) {
+    SpotLight(float ambientStr, float specStr, float specPhong, glm::vec3 lightColor, float lightIntensity, glm::vec3 position, glm::vec3 direction, float cutoff) :
+        Light(ambientStr, specStr, specPhong, lightColor, lightIntensity) {
         
+        this->position = position;
         this->direction = direction;
         this->cutoff = cutoff;
         
@@ -35,6 +37,12 @@ public:
 
         isActive = false;
         intensityLevel = 0;
+    }
+
+    void updateAttributes(glm::vec3 position, glm::vec3 direction) {
+        this->position = position;
+        this->direction = direction;
+
     }
 
     //set the value of the ambient strength in the shader
@@ -83,7 +91,7 @@ public:
     }
 
     //set the value of the light position in the shader
-    void setLightPosition(Shader shader, glm::vec3 position) {
+    void setLightPosition(Shader shader) {
         shader.useProgram();
 
         //set the value of the light position in the shader

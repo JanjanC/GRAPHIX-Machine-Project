@@ -56,14 +56,14 @@
     <ClInclude Include="Classes\Models\Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Models\Model3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Models\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Shaders\bird.frag" />
-    <CopyFileToFolders Include="Shaders\bird.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\sphere.frag" />
-    <None Include="Shaders\sphere.vert" />
     <None Include="..\..\GRAPHIX\Quiz03-Chua_JohnVincent\Src\Shaders\skybox.frag" />
     <None Include="..\..\GRAPHIX\Quiz03-Chua_JohnVincent\Src\Shaders\skybox.vert" />
   </ItemGroup>

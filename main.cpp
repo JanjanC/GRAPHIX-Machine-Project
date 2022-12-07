@@ -25,6 +25,7 @@
 
 /* Model Class */
 #include "Classes/Models/Model.h"
+#include "Classes/Models/Player.h"
 #include "Classes/Models/Skybox.h"
 
 /* Camera Classes */
@@ -38,13 +39,12 @@
 class Environment {
 
 public:
-    Model* mainModel;
+    Player* mainModel;
     Model* otherModel;
     Skybox *skybox;
     SpotLight* spotLight;
     DirectionalLight* directionalLight;
     Shader* mainShader;
-    Shader* sphereShader;
     Shader* skyboxShader;
     PerspectiveCamera* thirdPerspectiveCamera;
     PerspectiveCamera* firstPerspectiveCamera;
@@ -56,31 +56,30 @@ public:
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
 
+        //load the shader for the main object
+        mainShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
+
+        //load the shader for the skybox
+        skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
+
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        mainModel = new Model("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        mainModel->loadTexture("3D/bird.jpg");
+        mainModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
+        mainModel->loadTexture("3D/submarine_texture.png", *mainShader, "tex0");
+        mainModel->loadTexture("3D/submarine_normal.png", *mainShader, "norm_tex");
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        otherModel->loadTexture("3D/ayaya.png");
+        otherModel->loadTexture("3D/ayaya.png", *mainShader, "tex0");
+        //otherModel->loadTexture("3D/bird_normal.jpg", *mainShader, "norm_tex");
 
         skybox = new Skybox("Skybox/rainbow_rt.png", "Skybox/rainbow_lf.png", "Skybox/rainbow_up.png", "Skybox/rainbow_dn.png", "Skybox/rainbow_ft.png", "Skybox/rainbow_bk.png");
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
-        spotLight = new SpotLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), 12.5);
+        spotLight = new SpotLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), 12.5);
 
         //create a directional light with a position of (4, 11, -3)
-        directionalLight = new DirectionalLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
-
-        //load the shader for the main object
-        mainShader = new Shader("Shaders/bird.vert", "Shaders/bird.frag");
-
-        //load the shader for the point light
-        sphereShader = new Shader("Shaders/sphere.vert", "Shaders/sphere.frag");
-
-        //load the shader for the skybox
-        skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
+        directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
 
         //create a third person perspective camera
         thirdPerspectiveCamera = new PerspectiveCamera(mainModel->position - 5.0f * mainModel->direction, mainModel->position, glm::vec3(0, 1.0f, 0));
@@ -107,7 +106,6 @@ public:
         delete spotLight;
         delete directionalLight;
         delete mainShader;
-        delete sphereShader;
         delete thirdPerspectiveCamera;
         delete orthoCamera;
     }
@@ -121,8 +119,6 @@ public:
         //updates the uniform values
         activeCamera->setViewMatrix(*mainShader);
         activeCamera->setProjectionMatrix(*mainShader);
-        activeCamera->setViewMatrix(*sphereShader);
-        activeCamera->setProjectionMatrix(*sphereShader);
         activeCamera->setCameraPosition(*mainShader);
 
         spotLight->updateFields(mainModel->position, mainModel->direction);
@@ -143,7 +139,6 @@ public:
         directionalLight->setLightIntensity(*mainShader);
         directionalLight->setLightDirection(*mainShader);
 
-        //TODO: clean up later
         skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
         skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
 
@@ -189,27 +184,19 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         }
     }
 
-    //select and deselect the point light
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        environment->spotLight->processKeyboard(key);
-    }
-
-    //increase and decrease the light intensity
-    if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN || key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+    //cycle the light intensity
+    if (key == GLFW_KEY_F && action == GLFW_PRESS) {
         environment->spotLight->processKeyboard(key);
     }
 
     //change the camera view
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
-        printf("im in");
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
-            printf("first");            
             environment->activeCamera = environment->thirdPerspectiveCamera;
             environment->lastPerspective = 3;
         } 
         else
         if (environment->activeCamera == environment->thirdPerspectiveCamera) {
-            printf("third");            
             environment->activeCamera = environment->firstPerspectiveCamera;
             environment->lastPerspective = 1;
         }

@@ -1,13 +1,13 @@
 #include "Model3D.h"
 #pragma once
 
-class Model : public Model3D {
+class Player : public Model3D {
 public:
 
     glm::vec3 direction;
 
     //constructor for the main model class
-    Model(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
+    Player(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
         direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
         loadObject(modelPath);
     }
@@ -29,13 +29,88 @@ public:
             path.c_str()
         );
 
+        std::vector<glm::vec3> tangents; //collection of tangent
+        std::vector<glm::vec3> bitangents; //collection of tangent
+
+        //calculate for the tangent and bitangent
+        for (int i = 0; i < shapes[0].mesh.indices.size(); i += 3) {
+            //vertices of the triangle
+            tinyobj::index_t vData1 = shapes[0].mesh.indices[i]; //v1
+            tinyobj::index_t vData2 = shapes[0].mesh.indices[i + 1]; //v2
+            tinyobj::index_t vData3 = shapes[0].mesh.indices[i + 2]; //v3
+
+            //xyz components of vertex 1
+            glm::vec3 v1 = glm::vec3(
+                attributes.vertices[vData1.vertex_index * 3],
+                attributes.vertices[vData1.vertex_index * 3 + 1],
+                attributes.vertices[vData1.vertex_index * 3 + 2]
+            );
+
+            //xyz components of vertex 2
+            glm::vec3 v2 = glm::vec3(
+                attributes.vertices[vData2.vertex_index * 3],
+                attributes.vertices[vData2.vertex_index * 3 + 1],
+                attributes.vertices[vData2.vertex_index * 3 + 2]
+            );
+
+            //xyz components of vertex 3
+            glm::vec3 v3 = glm::vec3(
+                attributes.vertices[vData3.vertex_index * 3],
+                attributes.vertices[vData3.vertex_index * 3 + 1],
+                attributes.vertices[vData3.vertex_index * 3 + 2]
+            );
+
+            //uv components of vertex 1
+            glm::vec2 uv1 = glm::vec2(
+                attributes.texcoords[vData1.texcoord_index * 2],
+                attributes.texcoords[vData1.texcoord_index * 2 + 1]
+            );
+
+            //uv components of vertex 2
+            glm::vec2 uv2 = glm::vec2(
+                attributes.texcoords[vData2.texcoord_index * 2],
+                attributes.texcoords[vData2.texcoord_index * 2 + 1]
+            );
+
+            //uv components of vertex 3
+            glm::vec2 uv3 = glm::vec2(
+                attributes.texcoords[vData3.texcoord_index * 2],
+                attributes.texcoords[vData3.texcoord_index * 2 + 1]
+            );
+
+            //edges of the triangle
+            glm::vec3 deltaPos1 = v2 - v1;
+            glm::vec3 deltaPos2 = v3 - v1;
+
+            //uv delta
+            glm::vec2 deltaUV1 = uv2 - uv1;
+            glm::vec2 deltaUV2 = uv3 - uv1;
+
+            float r = 1.f / ((deltaUV1.x * deltaUV2.y) - (deltaUV1.y * deltaUV2.x));
+            //tangent
+            glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+            //bitangent
+            glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+            //push the tangent and bitangent 3 times for the 3 vertices of the triangle
+            tangents.push_back(tangent);
+            tangents.push_back(tangent);
+            tangents.push_back(tangent);
+
+            bitangents.push_back(bitangent);
+            bitangents.push_back(bitangent);
+            bitangents.push_back(bitangent);
+        }
+
         //determine if the obj file contains vertices, normals, and texture coordinates
         bool hasVertices = attributes.vertices.size() != 0;
         bool hasNormals = attributes.normals.size() != 0;
         bool hasTexCoords = attributes.texcoords.size() != 0;
+        bool hasTangents = tangents.size() != 0;
+        bool hasBitangents = bitangents.size() != 0;
 
         //calculate for the total number of attributes for a single vertex
-        attribCount = hasVertices * 3 + hasNormals * 3 + hasTexCoords * 2;
+        attribCount = hasVertices * 3 + hasNormals * 3 + hasTexCoords * 2 + hasTangents * 3 + hasBitangents * 3;
 
         //process the vertex attributes
         for (int i = 0; i < shapes[0].mesh.indices.size(); i++) {
@@ -92,6 +167,40 @@ public:
                 //texture v
                 fullVertexData.push_back(
                     attributes.texcoords[uvIndex + 1]
+                );
+            }
+
+            if (hasTangents) {
+                //tangent x
+                fullVertexData.push_back(
+                    tangents[i].x
+                );
+
+                //tangent y
+                fullVertexData.push_back(
+                    tangents[i].y
+                );
+
+                //tangent z
+                fullVertexData.push_back(
+                    tangents[i].z
+                );
+            }
+
+            if (hasBitangents) {
+                //bitangent x
+                fullVertexData.push_back(
+                    bitangents[i].x
+                );
+
+                // bitangent y
+                fullVertexData.push_back(
+                    bitangents[i].y
+                );
+
+                // bitangent z
+                fullVertexData.push_back(
+                    bitangents[i].z
                 );
             }
         }
@@ -164,6 +273,40 @@ public:
             attribOffset += 2; //update the offset by 2 (uv)
         }
 
+        if (hasTangents) {
+            GLintptr tangentPtr = attribOffset * sizeof(GLfloat); //caculate for the offset of the tangent
+            //assign tangent data to the vao
+            glVertexAttribPointer(
+                3,
+                3,
+                GL_FLOAT,
+                GL_FALSE,
+                attribCount * sizeof(GL_FLOAT),
+                (void*)tangentPtr
+            );
+
+            glEnableVertexAttribArray(3); //enable vertex attribute 3
+
+            attribOffset += 3; //update the offset by 2 (xyz)
+        }
+
+        if (hasBitangents) {
+            GLintptr bitangentPtr = attribOffset * sizeof(GLfloat); //caculate for the offset of the bitangent
+            //assign bitangent data to the vao
+            glVertexAttribPointer(
+                4,
+                3,
+                GL_FLOAT,
+                GL_FALSE,
+                attribCount * sizeof(GL_FLOAT),
+                (void*)bitangentPtr
+            );
+
+            glEnableVertexAttribArray(4); //enable vertex attribute 4
+
+            attribOffset += 3; //update the offset by 2 (xyz)
+        }
+
         glBindBuffer(GL_ARRAY_BUFFER, 0); //finish modifying the buffer
         glBindVertexArray(0); //finish modifying the vao
     }
@@ -205,6 +348,6 @@ public:
         /*Rotate to right*/
         if (key == GLFW_KEY_D) {
             theta.y -= rot_sensitivity + 1.0;
-        }        
+        }
     }
 };

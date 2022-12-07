@@ -36,6 +36,7 @@ struct SpotLight {
 };
 
 uniform sampler2D tex0; //index of the texture
+uniform sampler2D norm_tex;
 
 uniform DirectionalLight directionalLight; //directional light
 uniform SpotLight spotLight; //point light
@@ -46,10 +47,15 @@ in vec2 texCoord; //texture coordinates
 in vec3 normCoord; //normal coordinates
 in vec3 fragPos; //fragment position
 
+in mat3 TBN;
+
 out vec4 FragColor; //output fragment color
 
 vec3 calculateDirectionalLight (DirectionalLight light) {
-    vec3 normal = normalize(normCoord);
+    vec3 normal = texture(norm_tex,  texCoord).rgb;
+    normal = normalize(normal * 2.0 - 1.0); //convert rgb(0 to 1) to xyz (-1 to 1)
+    normal = normalize(TBN * normal);
+
     vec3 lightDir = normalize(-light.direction);
 
     //ambient
@@ -75,7 +81,10 @@ vec3 calculateDirectionalLight (DirectionalLight light) {
 }
 
 vec3 calculatePointLight(PointLight light) {
-    vec3 normal = normalize(normCoord);
+    vec3 normal = texture(norm_tex,  texCoord).rgb;
+    normal = normalize(normal * 2.0 - 1.0); //convert rgb(0 to 1) to xyz (-1 to 1)
+    normal = normalize(TBN * normal);
+
     vec3 lightDir = normalize(light.position - fragPos); //light direction
     
     //ambient
@@ -111,7 +120,10 @@ vec3 calculatePointLight(PointLight light) {
 }
 
 vec3 calculateSpotLight(SpotLight light) {
-    vec3 normal = normalize(normCoord);
+    vec3 normal = texture(norm_tex,  texCoord).rgb;
+    normal = normalize(normal * 2.0 - 1.0); //convert rgb(0 to 1) to xyz (-1 to 1)
+    normal = normalize(TBN * normal);
+
     vec3 lightDir = normalize(light.position - fragPos); //light direction
     
     //ambient
@@ -155,7 +167,7 @@ void main () {
     vec3 total; //stores the sum of the lights
     
     //calculate directional light
-    //total += calculateDirectionalLight(directionalLight);
+    total += calculateDirectionalLight(directionalLight);
 
     //calculate spot light
     total += calculateSpotLight(spotLight);

@@ -154,6 +154,11 @@ public:
         glm::mat4 sky_view = glm::mat4(1.f);
         sky_view = glm::mat4(glm::mat3(viewMatrix));
 
+        float scale_x, scale_y, scale_z;
+        scale_x = scale_y = scale_z = 50.0f;
+
+        sky_view = glm::scale(sky_view, glm::vec3(scale_x, scale_y, scale_z));
+
         // set the value of the view matrix in the shader
         unsigned int viewLoc = glGetUniformLocation(shader.shaderProgram, "view");
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(sky_view));

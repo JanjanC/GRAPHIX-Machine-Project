@@ -143,6 +143,7 @@ Environment* environment; //pointer to the environment object
 void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mods) {
 
     //model rotation and light movement
+    /*
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
 
         //rotate the point light when the point light is selected
@@ -155,6 +156,15 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
             environment->pointLight->processKeyboard(key);
         }
     }
+    */
+
+    /* Player Control Movement */
+    if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
+        /* Insert a flag for the camera being used e.g. camera is 1st person or 3rd person */
+        if (true) {
+            environment->mainModel->processKeyboard(key);
+        }
+    }
 
     //select and deselect the point light
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
@@ -162,7 +172,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     }
 
     //increase and decrease the light intensity
-    if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN || key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+    if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN || key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
         environment->directionalLight->processKeyboard(key);
         environment->pointLight->processKeyboard(key);
     }
@@ -174,6 +184,11 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
         environment->activeCamera = environment->orthoCamera;
+    }
+
+    /* Escaping the game */
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GL_TRUE);
     }
 }
 

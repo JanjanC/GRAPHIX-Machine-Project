@@ -9,36 +9,37 @@ public:
 
     //process keyboard inputs and update the object attributes
     void processKeyboard(int key) {
-        float sensitivity = 5.0f;
+        float rot_sensitivity = 1.0f;
+        float vert_sensitivity = 0.2f;
+        float horz_sensitivity = 0.4f;
 
-        //rotate around the x axis
-        if (key == GLFW_KEY_W) {
-            theta.x -= sensitivity;
-        }
+        glm::vec3 direction;
 
-        //rotate around the x axis
-        if (key == GLFW_KEY_S) {
-            theta.x += sensitivity;
-        }
-
-        //rotate around the y axis 
-        if (key == GLFW_KEY_A) {
-            theta.y -= sensitivity;
-        }
-
-        //rotate around the y axis
-        if (key == GLFW_KEY_D) {
-            theta.y += sensitivity;
-        }
-
-        //rotate around the z axis
-        if (key == GLFW_KEY_E) {
-            theta.z -= sensitivity;
-        }
-
-        //rotate around the z axis
+        /*Elevate*/
         if (key == GLFW_KEY_Q) {
-            theta.z += sensitivity;
+            position.y += vert_sensitivity;
+        }
+        /*Descend*/
+        if (key == GLFW_KEY_E) {
+            position.y -= vert_sensitivity;
+        }
+        /*Traverse Forward*/
+        if (key == GLFW_KEY_W) {
+            direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
+            position += direction * horz_sensitivity;
+        }
+        /*Traverse Backward*/
+        if (key == GLFW_KEY_S) {
+            direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
+            position -= direction * horz_sensitivity;
+        }
+        /*Rotate to left*/
+        if (key == GLFW_KEY_A) {
+            theta.y += rot_sensitivity + 1.0;
+        }
+        /*Rotate to right*/
+        if (key == GLFW_KEY_D) {
+            theta.y -= rot_sensitivity + 1.0;
         }
     }
 };

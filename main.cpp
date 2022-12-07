@@ -89,7 +89,7 @@ public:
         firstPerspectiveCamera = new PerspectiveCamera(mainModel->position, mainModel->position + 5.0f * mainModel->direction, glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
-        orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
+        orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, -0.1f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
         activeCamera = thirdPerspectiveCamera;
 
@@ -232,7 +232,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
             /* Set the position and target of ortho be on top of the player */
             environment->orthoCamera->position.x = environment->mainModel->position.x;
             environment->orthoCamera->target.x = environment->mainModel->position.x;            
-            environment->orthoCamera->position.z = environment->mainModel->position.z + 0.1f; // 0.1f addition to avoid looking straight down exactly
+            environment->orthoCamera->position.z = environment->mainModel->position.z - 0.1f; // 0.1f subtraction to avoid looking straight down exactly
             environment->orthoCamera->target.z = environment->mainModel->position.z;
 
             /* Set the camera to switch to ortho */

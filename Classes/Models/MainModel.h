@@ -1,13 +1,13 @@
 #include "Model3D.h"
 #pragma once
 
-class MainModel : public Model3D {
+class Model : public Model3D {
 public:
 
     glm::vec3 direction;
 
     //constructor for the main model class
-    MainModel(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
+    Model(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
         direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
     }
 

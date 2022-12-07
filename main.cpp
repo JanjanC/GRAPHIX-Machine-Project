@@ -38,8 +38,8 @@
 class Environment {
 
 public:
-    MainModel* mainModel;
-    MainModel* otherModel;
+    Model* mainModel;
+    Model* otherModel;
     Skybox *skybox;
     SpotLight* spotLight;
     DirectionalLight* directionalLight;
@@ -57,10 +57,10 @@ public:
 
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        mainModel = new MainModel("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        mainModel = new Model("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         mainModel->loadTexture("3D/bird.jpg");
 
-        otherModel = new MainModel("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         otherModel->loadTexture("3D/ayaya.png");
 
         skybox = new Skybox("Skybox/rainbow_rt.png", "Skybox/rainbow_lf.png", "Skybox/rainbow_up.png", "Skybox/rainbow_dn.png", "Skybox/rainbow_ft.png", "Skybox/rainbow_bk.png");

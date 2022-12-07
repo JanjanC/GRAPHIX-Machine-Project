@@ -39,7 +39,7 @@ public:
         intensityLevel = 0;
     }
 
-    void updateAttributes(glm::vec3 position, glm::vec3 direction) {
+    void updateFields(glm::vec3 position, glm::vec3 direction) {
         this->position = position;
         this->direction = direction;
 

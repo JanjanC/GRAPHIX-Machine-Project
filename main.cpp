@@ -119,7 +119,7 @@ public:
         activeCamera->setProjectionMatrix(*sphereShader);
         activeCamera->setCameraPosition(*mainShader);
 
-        spotLight->updateAttributes(mainModel->position, mainModel->direction);
+        spotLight->updateFields(mainModel->position, mainModel->direction);
         spotLight->setAmbientStr(*mainShader);
         spotLight->setSpecStr(*mainShader);
         spotLight->setSpecPhong(*mainShader);

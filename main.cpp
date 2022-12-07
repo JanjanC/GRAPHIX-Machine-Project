@@ -83,6 +83,12 @@ public:
         orthoCamera = new OrthoCamera(glm::vec3(0, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
         activeCamera = perspectiveCamera;
+
+        /* print the initial info of the submarine */
+        std::cout << "Submarine system initialization... COMPLETE\n";
+        std::cout << "Preparing for underwater exploration...\n\n";
+        std::cout << "[SUBMARINE STATUS]\n";
+        std::cout << "Current ocean depth: " << mainModel->position.y;
     }
     
     //destructor for the environment class

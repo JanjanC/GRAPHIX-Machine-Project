@@ -14,15 +14,20 @@ public:
         float horz_sensitivity = 0.4f;
 
         glm::vec3 direction;
+        
+        if (key == GLFW_KEY_Q || key == GLFW_KEY_E) {
+            /*Elevate*/
+            if (key == GLFW_KEY_Q) {
+                position.y += vert_sensitivity;
+            }
+            /*Descend*/
+            if (key == GLFW_KEY_E) {
+                position.y -= vert_sensitivity;
+            }
+            /*Update depth info*/
+            std::cout << "\r" << "Current ocean depth: " << position.y;
+        }
 
-        /*Elevate*/
-        if (key == GLFW_KEY_Q) {
-            position.y += vert_sensitivity;
-        }
-        /*Descend*/
-        if (key == GLFW_KEY_E) {
-            position.y -= vert_sensitivity;
-        }
         /*Traverse Forward*/
         if (key == GLFW_KEY_W) {
             direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
@@ -40,6 +45,6 @@ public:
         /*Rotate to right*/
         if (key == GLFW_KEY_D) {
             theta.y -= rot_sensitivity + 1.0;
-        }
+        }        
     }
 };

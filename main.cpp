@@ -47,9 +47,9 @@ public:
     Shader* sphereShader;
     Shader* skyboxShader;
     PerspectiveCamera* thirdPerspectiveCamera;
+    PerspectiveCamera* firstPerspectiveCamera;
     OrthoCamera* orthoCamera;
     MyCamera* activeCamera;
-
     int cameraIndex = 0;
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
@@ -81,8 +81,11 @@ public:
         //load the shader for the skybox
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
 
-        //create a perspective camera
+        //create a third person perspective camera
         thirdPerspectiveCamera = new PerspectiveCamera(mainModel->position - 5.0f * mainModel->direction, mainModel->position, glm::vec3(0, 1.0f, 0));
+
+        //create a first person perspective camera
+        firstPerspectiveCamera = new PerspectiveCamera(mainModel->position, mainModel->position + 5.0f * mainModel->direction, glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
         orthoCamera = new OrthoCamera(glm::vec3(0, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
@@ -111,7 +114,9 @@ public:
     //updates the uniform values of the shader files and draws the objects on the screen
     void update() {
 
-        thirdPerspectiveCamera->updateFields(mainModel->position, mainModel->direction);
+        thirdPerspectiveCamera->updateFields(mainModel->position - 5.0f * mainModel->direction, mainModel->position);
+        firstPerspectiveCamera->updateFields(mainModel->position, mainModel->position + 5.0f * mainModel->direction);
+
         //updates the uniform values
         activeCamera->setViewMatrix(*mainShader);
         activeCamera->setProjectionMatrix(*mainShader);
@@ -138,8 +143,8 @@ public:
         directionalLight->setLightDirection(*mainShader);
 
         //TODO: clean up later
-        skybox->setViewMatrix(*skyboxShader, thirdPerspectiveCamera->viewMatrix);
-        skybox->setProjectionMatrix(*skyboxShader, thirdPerspectiveCamera->projectionMatrix);
+        skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
+        skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
 
         //draws the objects on the screens
         mainModel->draw(*mainShader);
@@ -174,7 +179,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     /* Player Control Movement */
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
         /* Insert a flag for the camera being used e.g. camera is 1st person or 3rd person */
-        if (environment->activeCamera == environment->thirdPerspectiveCamera) {
+        if (environment->activeCamera == environment->thirdPerspectiveCamera || environment->activeCamera == environment->firstPerspectiveCamera) {
             environment->mainModel->processKeyboard(key);
         }
     }
@@ -191,7 +196,16 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 
     //change the camera view
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
-        environment->activeCamera = environment->thirdPerspectiveCamera;
+        printf("im in");
+        if (environment->activeCamera == environment->firstPerspectiveCamera) {
+            printf("first");
+            environment->activeCamera = environment->thirdPerspectiveCamera;
+        } 
+        else
+        if (environment->activeCamera == environment->thirdPerspectiveCamera) {
+            printf("third");
+            environment->activeCamera = environment->firstPerspectiveCamera;
+        }
     }
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {

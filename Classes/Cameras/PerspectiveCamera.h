@@ -42,9 +42,9 @@ public:
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     }
 
-    void updateFields(glm::vec3 modelPosition, glm::vec3 modelDirection) {
-        position = modelPosition - distance * modelDirection;
-        target = modelPosition;
+    void updateFields(glm::vec3 position, glm::vec3 target) {
+        this->position = position;
+        this->target = target;
     }
 
     //process the mouse inputs and updates the object attributes

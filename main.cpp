@@ -229,9 +229,12 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         }
         /* Toggle on - save the last used perspective and switch the camera to ortho */
         else {
-            /* Set the position of ortho be on top of the player */
+            /* Set the position and target of ortho be on top of the player */
             environment->orthoCamera->position.x = environment->mainModel->position.x;
-            environment->orthoCamera->position.z = environment->mainModel->position.z + 0.1f;
+            environment->orthoCamera->target.x = environment->mainModel->position.x;            
+            environment->orthoCamera->position.z = environment->mainModel->position.z + 0.1f; // 0.1f addition to avoid looking straight down exactly
+            environment->orthoCamera->target.z = environment->mainModel->position.z;
+
             /* Set the camera to switch to ortho */
             environment->activeCamera = environment->orthoCamera;
         }   

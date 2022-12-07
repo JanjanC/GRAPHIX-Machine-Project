@@ -51,6 +51,7 @@ public:
     OrthoCamera* orthoCamera;
     MyCamera* activeCamera;
     int cameraIndex = 0;
+    int lastPerspective = 3;
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
@@ -88,7 +89,7 @@ public:
         firstPerspectiveCamera = new PerspectiveCamera(mainModel->position, mainModel->position + 5.0f * mainModel->direction, glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
-        orthoCamera = new OrthoCamera(glm::vec3(0, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
+        orthoCamera = new OrthoCamera(mainModel->position, glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
         activeCamera = thirdPerspectiveCamera;
 
@@ -182,6 +183,10 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         if (environment->activeCamera == environment->thirdPerspectiveCamera || environment->activeCamera == environment->firstPerspectiveCamera) {
             environment->mainModel->processKeyboard(key);
         }
+        /* Birds-eye view */
+        if (environment->activeCamera == environment->orthoCamera) {
+            environment->orthoCamera->processKeyboard(key);
+        }
     }
 
     //select and deselect the point light
@@ -199,17 +204,37 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         printf("im in");
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
             printf("first");
+            environment->lastPerspective = 1;
             environment->activeCamera = environment->thirdPerspectiveCamera;
         } 
         else
         if (environment->activeCamera == environment->thirdPerspectiveCamera) {
             printf("third");
+            environment->lastPerspective = 3;
             environment->activeCamera = environment->firstPerspectiveCamera;
         }
     }
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
-        environment->activeCamera = environment->orthoCamera;
+        /* Toggle off - the current camera is in ortho already */
+        if (environment->activeCamera == environment->orthoCamera) {
+            switch (environment->lastPerspective) {
+                case 1: 
+                    environment->activeCamera = environment->firstPerspectiveCamera;
+                    break;
+                case 3:
+                    environment->activeCamera = environment->thirdPerspectiveCamera;
+                    break;
+            }
+        }
+        /* Toggle on - save the last used perspective and switch the camera to ortho */
+        else {
+            /* Set the position of ortho be on top of the player */
+            environment->orthoCamera->position.x = environment->mainModel->position.x;
+            environment->orthoCamera->position.z = environment->mainModel->position.z;
+            /* Set the camera to switch to ortho */
+            environment->activeCamera = environment->orthoCamera;
+        }   
     }
 
     /* Escaping the game */

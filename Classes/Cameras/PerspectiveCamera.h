@@ -90,6 +90,6 @@ public:
 
         front = glm::normalize(front); //ensure that the distance between the camera and the target relative to the camera position is always 1 unit
     
-        //target = position + 10.0f * front;
+        target = position + 10.0f * front;
     }
 };

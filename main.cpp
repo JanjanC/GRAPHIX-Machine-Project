@@ -40,7 +40,7 @@ class Environment {
 public:
     MainModel* mainModel;
     Skybox *skybox;
-    PointLight* pointLight;
+    SpotLight* spotLight;
     DirectionalLight* directionalLight;
     Shader* mainShader;
     Shader* sphereShader;
@@ -62,10 +62,10 @@ public:
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
-        pointLight = new PointLight("3D/sphere.obj", glm::vec3(3.0f, 3.0f, 0), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f), 0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f);
+        spotLight = new SpotLight("3D/sphere.obj", glm::vec3(3.0f, 3.0f, 0), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f), 0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0), 12.5);
 
         //create a directional light with a position of (4, 11, -3)
-        directionalLight = new DirectionalLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, 0, 0) - glm::vec3(4, 11, -3));
+        directionalLight = new DirectionalLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
 
         //load the shader for the main object
         mainShader = new Shader("Shaders/bird.vert", "Shaders/bird.frag");
@@ -95,7 +95,7 @@ public:
     ~Environment() {
         //deallocates the objects from the memory
         delete mainModel;
-        delete pointLight;
+        delete spotLight;
         delete directionalLight;
         delete mainShader;
         delete sphereShader;
@@ -113,15 +113,15 @@ public:
         activeCamera->setProjectionMatrix(*sphereShader);
         activeCamera->setCameraPosition(*mainShader);
 
-        pointLight->setCustomColor(*sphereShader);
-
-        pointLight->setAmbientStr(*mainShader);
-        pointLight->setSpecStr(*mainShader);
-        pointLight->setSpecPhong(*mainShader);
-        pointLight->setLightColor(*mainShader);
-        pointLight->setLightIntensity(*mainShader);
-        pointLight->setLightPosition(*mainShader);
-        pointLight->setAttenuationConstants(*mainShader);
+        spotLight->setAmbientStr(*mainShader);
+        spotLight->setSpecStr(*mainShader);
+        spotLight->setSpecPhong(*mainShader);
+        spotLight->setLightColor(*mainShader);
+        spotLight->setLightIntensity(*mainShader);
+        spotLight->setLightPosition(*mainShader, mainModel->position);
+        spotLight->setLightDirection(*mainShader);
+        spotLight->setAttenuationConstants(*mainShader);
+        spotLight->setCutoff(*mainShader);
 
         directionalLight->setAmbientStr(*mainShader);
         directionalLight->setSpecStr(*mainShader);
@@ -136,7 +136,7 @@ public:
 
         //draws the objects on the screens
         mainModel->draw(*mainShader);
-        pointLight->draw(*sphereShader);
+        spotLight->draw(*sphereShader);
         skybox->draw(*skyboxShader);
     }
 };
@@ -153,13 +153,13 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
 
         //rotate the point light when the point light is selected
-        if (!environment->pointLight->isActive) {
+        if (!environment->spotLight->isActive) {
             environment->mainModel->processKeyboard(key);
         }
 
         //rotate the main model when the point light is not selected
-        if (environment->pointLight->isActive) {
-            environment->pointLight->processKeyboard(key);
+        if (environment->spotLight->isActive) {
+            environment->spotLight->processKeyboard(key);
         }
     }
     */
@@ -174,13 +174,12 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 
     //select and deselect the point light
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        environment->pointLight->processKeyboard(key);
+        environment->spotLight->processKeyboard(key);
     }
 
     //increase and decrease the light intensity
     if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN || key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT) && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
-        environment->directionalLight->processKeyboard(key);
-        environment->pointLight->processKeyboard(key);
+        environment->spotLight->processKeyboard(key);
     }
 
     //change the camera view

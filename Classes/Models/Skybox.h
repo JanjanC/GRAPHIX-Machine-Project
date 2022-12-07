@@ -146,7 +146,7 @@ public:
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     }
 
-    // set the value of the projection matrix in the shader
+    // set the value of the view matrix in the shader
     void setViewMatrix(Shader shader, glm::mat4 viewMatrix) {
         shader.useProgram();
 

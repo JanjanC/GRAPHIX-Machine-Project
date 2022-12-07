@@ -25,23 +25,23 @@ public:
 
         /*Traverse Forward*/
         if (key == GLFW_KEY_W) {           
-            position.z -= sensitivity;
-            target.z -= sensitivity;
-        }
-        /*Traverse Backward*/
-        if (key == GLFW_KEY_S) {
             position.z += sensitivity;
             target.z += sensitivity;
         }
+        /*Traverse Backward*/
+        if (key == GLFW_KEY_S) {
+            position.z -= sensitivity;
+            target.z -= sensitivity;
+        }
         /*Rotate to left*/
         if (key == GLFW_KEY_A) {
-            position.x -= sensitivity;
-            target.x -= sensitivity;
+            position.x += sensitivity;
+            target.x += sensitivity;
         }
         /*Rotate to right*/
         if (key == GLFW_KEY_D) {
-            position.x += sensitivity;
-            target.x += sensitivity;
+            position.x -= sensitivity;
+            target.x -= sensitivity;
         }
     }
 };

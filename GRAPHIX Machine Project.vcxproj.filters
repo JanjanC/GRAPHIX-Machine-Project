@@ -64,10 +64,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Shaders\bird.frag" />
-    <CopyFileToFolders Include="Shaders\bird.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\GRAPHIX\Quiz03-Chua_JohnVincent\Src\Shaders\skybox.frag" />
     <None Include="..\..\GRAPHIX\Quiz03-Chua_JohnVincent\Src\Shaders\skybox.vert" />
   </ItemGroup>

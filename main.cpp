@@ -39,7 +39,7 @@
 class Environment {
 
 public:
-    Model* mainModel;
+    Player* mainModel;
     Model* otherModel;
     Skybox *skybox;
     SpotLight* spotLight;
@@ -56,18 +56,20 @@ public:
     Environment() {
 
         //load the shader for the main object
-        mainShader = new Shader("Shaders/bird.vert", "Shaders/bird.frag");
+        mainShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
 
         //load the shader for the skybox
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
 
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        mainModel = new Model("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        mainModel = new Player("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         mainModel->loadTexture("3D/bird.jpg", *mainShader, "tex0");
+        mainModel->loadTexture("3D/bird_normal.jpg", *mainShader, "norm_tex");
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         otherModel->loadTexture("3D/ayaya.png", *mainShader, "tex0");
+        //otherModel->loadTexture("3D/bird_normal.jpg", *mainShader, "norm_tex");
 
         skybox = new Skybox("Skybox/rainbow_rt.png", "Skybox/rainbow_lf.png", "Skybox/rainbow_up.png", "Skybox/rainbow_dn.png", "Skybox/rainbow_ft.png", "Skybox/rainbow_bk.png");
 

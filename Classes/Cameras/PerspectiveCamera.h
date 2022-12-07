@@ -7,7 +7,7 @@ public:
     float xLast, yLast; //stores the last cursor position
     bool isInitialized;//checks if the values of xLast and yLast have been initialized
 
-    glm::vec3 front;
+    float distance; //distance from the camera to the target
     float pitch; //the rotation of the camera around the x axis
     float yaw; //the rotation of the camera around the y axis
 
@@ -15,6 +15,12 @@ public:
     PerspectiveCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) : MyCamera(position, target, up) {
         xLast = yLast = 0.0f;
         isInitialized = false;
+
+        //target = position + front;
+        //front = target - position;
+
+        distance = glm::length(position - target);
+
         pitch = 0.0f;
         yaw = -90.0f;
     }
@@ -36,8 +42,9 @@ public:
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     }
 
-    void update(glm::vec3 position) {
-        this->position = position + glm::vec3(0, 0, 10);
+    void updateFields(glm::vec3 modelPosition, glm::vec3 modelDirection) {
+        position = modelPosition - distance * modelDirection;
+        target = modelPosition;
     }
 
     //process the mouse inputs and updates the object attributes
@@ -83,7 +90,7 @@ public:
 
         ////update the camera position
         //position = newPosition;
-
+        glm::vec3 front;
         front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
         front.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
         front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the y component is influenced by the y component of the yaw and the x component of the pitch

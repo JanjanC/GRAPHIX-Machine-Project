@@ -4,8 +4,12 @@
 class MainModel : public Model3D {
 public:
 
+    glm::vec3 direction;
+
     //constructor for the main model class
-    MainModel(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {}
+    MainModel(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
+        direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
+    }
 
     //process keyboard inputs and update the object attributes
     void processKeyboard(int key) {
@@ -13,8 +17,9 @@ public:
         float vert_sensitivity = 0.2f;
         float horz_sensitivity = 0.4f;
 
-        glm::vec3 direction;
-        
+        //update the direction of the model
+        direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
+
         if (key == GLFW_KEY_Q || key == GLFW_KEY_E) {
             /*Elevate*/
             if (key == GLFW_KEY_Q && position.y) {
@@ -30,12 +35,10 @@ public:
 
         /*Traverse Forward*/
         if (key == GLFW_KEY_W) {
-            direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
             position += direction * horz_sensitivity;
         }
         /*Traverse Backward*/
         if (key == GLFW_KEY_S) {
-            direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
             position -= direction * horz_sensitivity;
         }
         /*Rotate to left*/

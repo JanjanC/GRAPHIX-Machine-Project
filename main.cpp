@@ -82,7 +82,7 @@ public:
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
 
         //create a perspective camera
-        perspectiveCamera = new PerspectiveCamera(mainModel->position + glm::vec3(0, 0, 10.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
+        perspectiveCamera = new PerspectiveCamera(mainModel->position - 5.0f * mainModel->direction, mainModel->position, glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
         orthoCamera = new OrthoCamera(glm::vec3(0, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
@@ -111,8 +111,7 @@ public:
     //updates the uniform values of the shader files and draws the objects on the screen
     void update() {
 
-        perspectiveCamera->update(mainModel->position);
-
+        perspectiveCamera->updateFields(mainModel->position, mainModel->direction);
         //updates the uniform values
         activeCamera->setViewMatrix(*mainShader);
         activeCamera->setProjectionMatrix(*mainShader);
@@ -120,7 +119,7 @@ public:
         activeCamera->setProjectionMatrix(*sphereShader);
         activeCamera->setCameraPosition(*mainShader);
 
-        spotLight->updateAttributes(mainModel->position, glm::vec3(0, 0, -1));
+        spotLight->updateAttributes(mainModel->position, mainModel->direction);
         spotLight->setAmbientStr(*mainShader);
         spotLight->setSpecStr(*mainShader);
         spotLight->setSpecPhong(*mainShader);
@@ -238,7 +237,7 @@ int main(void)
 
     //set callbacks for key presses and cursor movement
     glfwSetKeyCallback(window, Key_Callback);
-    glfwSetCursorPosCallback(window, Mouse_Callback);
+    //glfwSetCursorPosCallback(window, Mouse_Callback);
 
     //prevent the mouse from going out the window
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

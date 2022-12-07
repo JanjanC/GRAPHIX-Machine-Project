@@ -144,6 +144,8 @@
     <ClInclude Include="Classes\Light\Light.h" />
     <ClInclude Include="Classes\Light\SpotLight.h" />
     <ClInclude Include="Classes\Models\Model.h" />
+    <ClInclude Include="Classes\Models\Model3D.h" />
+    <ClInclude Include="Classes\Models\Player.h" />
     <ClInclude Include="Classes\Models\Shader.h" />
     <ClInclude Include="Classes\Models\Skybox.h" />
     <ClInclude Include="stb_image.h" />

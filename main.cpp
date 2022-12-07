@@ -25,6 +25,7 @@
 
 /* Model Class */
 #include "Classes/Models/Model.h"
+#include "Classes/Models/Player.h"
 #include "Classes/Models/Skybox.h"
 
 /* Camera Classes */

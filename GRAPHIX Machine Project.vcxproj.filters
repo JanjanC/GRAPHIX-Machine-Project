@@ -56,6 +56,12 @@
     <ClInclude Include="Classes\Models\Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Classes\Models\Model3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Models\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\bird.frag" />

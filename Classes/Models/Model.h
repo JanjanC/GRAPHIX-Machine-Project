@@ -9,6 +9,7 @@ public:
     //constructor for the main model class
     Model(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
         direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
+        loadObject(modelPath);
     }
 
     //load the vertex attributes from the obj file

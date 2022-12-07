@@ -7,8 +7,9 @@ public:
     glm::vec3 direction;
 
     //constructor for the main model class
-    Model(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
+    Player(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) : Model3D(modelPath, position, scale, theta) {
         direction = glm::normalize(glm::vec3(sin(glm::radians(theta.y)), 0, cos(glm::radians(theta.y))));
+        loadObject(modelPath);
     }
 
     //load the vertex attributes from the obj file
@@ -270,6 +271,40 @@ public:
             glEnableVertexAttribArray(2); //enable vertex attribute 2
 
             attribOffset += 2; //update the offset by 2 (uv)
+        }
+
+        if (hasTangents) {
+            GLintptr tangentPtr = attribOffset * sizeof(GLfloat); //caculate for the offset of the tangent
+            //assign tangent data to the vao
+            glVertexAttribPointer(
+                3,
+                3,
+                GL_FLOAT,
+                GL_FALSE,
+                attribCount * sizeof(GL_FLOAT),
+                (void*)tangentPtr
+            );
+
+            glEnableVertexAttribArray(3); //enable vertex attribute 3
+
+            attribOffset += 3; //update the offset by 2 (xyz)
+        }
+
+        if (hasBitangents) {
+            GLintptr bitangentPtr = attribOffset * sizeof(GLfloat); //caculate for the offset of the bitangent
+            //assign bitangent data to the vao
+            glVertexAttribPointer(
+                4,
+                3,
+                GL_FLOAT,
+                GL_FALSE,
+                attribCount * sizeof(GL_FLOAT),
+                (void*)bitangentPtr
+            );
+
+            glEnableVertexAttribArray(4); //enable vertex attribute 4
+
+            attribOffset += 3; //update the offset by 2 (xyz)
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, 0); //finish modifying the buffer

@@ -8,6 +8,7 @@ public:
     int attribCount; //the number of attributes in a set of vertex in fullVertexData
     GLuint VAO, VBO; //vao and vbo id of the model
     std::vector<GLuint> textures; //stores the list of textures used by the model
+    std::vector<GLuint > textureAddresses;
     glm::vec3 position, scale, theta; //stores the information to be used for transformation
 
     //constructor for the model class
@@ -16,9 +17,6 @@ public:
         this->position = position;
         this->scale = scale;
         this->theta = theta;
-
-        //load the vertex attributes from the obj file to the fullVertexData array
-        loadObject(modelPath);
     }
 
     //destructor for the model class
@@ -30,7 +28,7 @@ public:
 
     virtual void loadObject(std::string path) = 0;
 
-    void loadTexture(std::string path) {
+    void loadTexture(std::string path, Shader shader, std::string textureName) {
         stbi_set_flip_vertically_on_load(true); //flip the texture
 
         int img_width, img_height, color_channels;
@@ -80,6 +78,9 @@ public:
 
         //insert to the list of textures
         textures.push_back(texture);
+
+
+        textureAddresses.push_back(glGetUniformLocation(shader.shaderProgram, textureName.c_str())); //get the address of the texture name
     }
 
     //draws the model on the screen after applying the appropiate transformation
@@ -91,12 +92,11 @@ public:
         glBindVertexArray(VAO);
 
         //loads the texture(s) of the model
-        for (int i = 0; i < textures.size(); i++) {
+        for (int i = 0; i < textures.size() && i < textureAddresses.size(); i++) {
+            glActiveTexture(GL_TEXTURE0 + i);
             //set the value of the tex0Address in the shader
-            GLuint tex0Address = glGetUniformLocation(shader.shaderProgram, "tex0"); //get the
-            glUniform1i(tex0Address, i); //texture at i
-
             glBindTexture(GL_TEXTURE_2D, textures[i]);
+            glUniform1i(textureAddresses[i], i); //texture at i
         }
 
         //compute for the transformation matrix of the model

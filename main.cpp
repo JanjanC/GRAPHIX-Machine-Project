@@ -56,13 +56,22 @@ public:
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
 
+        //load the shader for the main object
+        mainShader = new Shader("Shaders/bird.vert", "Shaders/bird.frag");
+
+        //load the shader for the point light
+        sphereShader = new Shader("Shaders/sphere.vert", "Shaders/sphere.frag");
+
+        //load the shader for the skybox
+        skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
+
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
         mainModel = new Model("3D/bird.obj", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        mainModel->loadTexture("3D/bird.jpg");
+        mainModel->loadTexture("3D/bird.jpg", *mainShader, "tex0");
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        otherModel->loadTexture("3D/ayaya.png");
+        otherModel->loadTexture("3D/ayaya.png", *mainShader, "tex0");
 
         skybox = new Skybox("Skybox/rainbow_rt.png", "Skybox/rainbow_lf.png", "Skybox/rainbow_up.png", "Skybox/rainbow_dn.png", "Skybox/rainbow_ft.png", "Skybox/rainbow_bk.png");
 
@@ -72,15 +81,6 @@ public:
 
         //create a directional light with a position of (4, 11, -3)
         directionalLight = new DirectionalLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
-
-        //load the shader for the main object
-        mainShader = new Shader("Shaders/bird.vert", "Shaders/bird.frag");
-
-        //load the shader for the point light
-        sphereShader = new Shader("Shaders/sphere.vert", "Shaders/sphere.frag");
-
-        //load the shader for the skybox
-        skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
 
         //create a third person perspective camera
         thirdPerspectiveCamera = new PerspectiveCamera(mainModel->position - 5.0f * mainModel->direction, mainModel->position, glm::vec3(0, 1.0f, 0));

@@ -30,7 +30,7 @@ public:
                 position.y -= vert_sensitivity;
             }
             /*Update depth info*/
-            std::cout << "\r" << "Current ocean depth: " << position.y;
+            printf("\rCurrent ocean depth: %.2f ", position.y);
         }
 
         /*Traverse Forward*/

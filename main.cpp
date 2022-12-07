@@ -89,7 +89,7 @@ public:
         firstPerspectiveCamera = new PerspectiveCamera(mainModel->position, mainModel->position + 5.0f * mainModel->direction, glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
-        orthoCamera = new OrthoCamera(mainModel->position, glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
+        orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, 1.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
         activeCamera = thirdPerspectiveCamera;
 
@@ -203,15 +203,15 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         printf("im in");
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
-            printf("first");
-            environment->lastPerspective = 1;
+            printf("first");            
             environment->activeCamera = environment->thirdPerspectiveCamera;
+            environment->lastPerspective = 3;
         } 
         else
         if (environment->activeCamera == environment->thirdPerspectiveCamera) {
-            printf("third");
-            environment->lastPerspective = 3;
+            printf("third");            
             environment->activeCamera = environment->firstPerspectiveCamera;
+            environment->lastPerspective = 1;
         }
     }
 
@@ -231,7 +231,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         else {
             /* Set the position of ortho be on top of the player */
             environment->orthoCamera->position.x = environment->mainModel->position.x;
-            environment->orthoCamera->position.z = environment->mainModel->position.z;
+            environment->orthoCamera->position.z = environment->mainModel->position.z + 0.1f;
             /* Set the camera to switch to ortho */
             environment->activeCamera = environment->orthoCamera;
         }   

@@ -39,7 +39,7 @@
 class Environment {
 
 public:
-    Player* mainModel;
+    Player* playerModel;
     Model* otherModel;
     Skybox *skybox;
     SpotLight* spotLight;
@@ -68,9 +68,9 @@ public:
 
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        mainModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
-        mainModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
-        mainModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
+        playerModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
+        playerModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
+        playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         otherModel->loadTexture("3D/ayaya.png", *modelShader, "tex0");
@@ -85,10 +85,10 @@ public:
         directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
 
         //create a third person perspective camera
-        thirdPerspectiveCamera = new PerspectiveCamera(mainModel->position - 5.0f * mainModel->direction, mainModel->position, glm::vec3(0, 1.0f, 0));
+        thirdPerspectiveCamera = new PerspectiveCamera(playerModel->position - 5.0f * playerModel->direction, playerModel->position, glm::vec3(0, 1.0f, 0));
 
         //create a first person perspective camera
-        firstPerspectiveCamera = new PerspectiveCamera(mainModel->position, mainModel->position + 5.0f * mainModel->direction, glm::vec3(0, 1.0f, 0));
+        firstPerspectiveCamera = new PerspectiveCamera(playerModel->position, playerModel->position + 5.0f * playerModel->direction, glm::vec3(0, 1.0f, 0));
 
         //create a orthographic camera
         orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, -0.1f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
@@ -99,13 +99,13 @@ public:
         std::cout << "Submarine system initialization... COMPLETE\n";
         std::cout << "Preparing for underwater exploration...\n\n";
         std::cout << "[SUBMARINE STATUS]\n";
-        std::cout << "Current ocean depth: " << mainModel->position.y;
+        std::cout << "Current ocean depth: " << playerModel->position.y;
     }
     
     //destructor for the environment class
     ~Environment() {
         //deallocates the objects from the memory
-        delete mainModel;
+        delete playerModel;
         delete spotLight;
         delete directionalLight;
         delete playerShader;
@@ -118,10 +118,10 @@ public:
 
     //updates the uniform values of the shader files and draws the objects on the screen
     void updateScreen() {        
-        firstPerspectiveCamera->updateFields(mainModel->position, mainModel->direction);
-        thirdPerspectiveCamera->updateFields(mainModel->position);
+        firstPerspectiveCamera->updateFields(playerModel->position, playerModel->direction);
+        thirdPerspectiveCamera->updateFields(playerModel->position);
 
-        spotLight->updateFields(mainModel->position, mainModel->direction);
+        spotLight->updateFields(playerModel->position, playerModel->direction);
 
         updateShader(*playerShader);
         updateShader(*modelShader);
@@ -139,7 +139,7 @@ public:
         }
         else {
             glDisable(GL_BLEND);
-            mainModel->draw(*playerShader);
+            playerModel->draw(*playerShader);
         }
         otherModel->draw(*modelShader);
         skybox->draw(*skyboxShader);
@@ -178,27 +178,11 @@ Environment* environment; //pointer to the environment object
 //callback function for key presses
 void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mods) {
 
-    //model rotation and light movement
-    /*
-    if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
-
-        //rotate the point light when the point light is selected
-        if (!environment->spotLight->isActive) {
-            environment->mainModel->processKeyboard(key);
-        }
-
-        //rotate the main model when the point light is not selected
-        if (environment->spotLight->isActive) {
-            environment->spotLight->processKeyboard(key);
-        }
-    }
-    */
-
     /* Player Control Movement */
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
         /* Insert a flag for the camera being used e.g. camera is 1st person or 3rd person */
         if (environment->activeCamera == environment->thirdPerspectiveCamera || environment->activeCamera == environment->firstPerspectiveCamera) {
-            environment->mainModel->processKeyboard(key);
+            environment->playerModel->processKeyboard(key);
         }
         /* Birds-eye view */
         if (environment->activeCamera == environment->orthoCamera) {
@@ -239,10 +223,10 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         /* Toggle on - save the last used perspective and switch the camera to ortho */
         else {
             /* Set the position and target of ortho be on top of the player */
-            environment->orthoCamera->position.x = environment->mainModel->position.x;
-            environment->orthoCamera->target.x = environment->mainModel->position.x;            
-            environment->orthoCamera->position.z = environment->mainModel->position.z - 0.1f; // 0.1f subtraction to avoid looking straight down exactly
-            environment->orthoCamera->target.z = environment->mainModel->position.z;
+            environment->orthoCamera->position.x = environment->playerModel->position.x;
+            environment->orthoCamera->target.x = environment->playerModel->position.x;            
+            environment->orthoCamera->position.z = environment->playerModel->position.z - 0.1f; // 0.1f subtraction to avoid looking straight down exactly
+            environment->orthoCamera->target.z = environment->playerModel->position.z;
 
             /* Set the camera to switch to ortho */
             environment->activeCamera = environment->orthoCamera;

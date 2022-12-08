@@ -80,7 +80,7 @@ public:
         model->loadTexture("3D/megalodon_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
-        model = new Model("3D/turtle.obj", glm::vec3(0.0f, -30.0f, -100.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(30.0f, 225.0f, 60.0f));
+        model = new Model("3D/turtle.obj", glm::vec3(0.0f, -30.0f, -100.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(-25.0f, 225.0f, 0.0f));
         model->loadTexture("3D/turtle_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 

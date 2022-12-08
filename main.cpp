@@ -95,8 +95,8 @@ public:
         model->loadTexture("3D/starfish_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
         
-        model = new Model("3D/koi_fish.obj", glm::vec3(1.0f, 0.0f, 50.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        model->loadTexture("3D/koi_fish_texture.png", *modelShader, "tex0");
+        model = new Model("3D/koi.obj", glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/koi_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
@@ -170,13 +170,10 @@ public:
             playerModel->draw(*playerShader);
         }
         for (int i = 0; i < otherModels.size(); i++) {
-            /*otherModels[i]->draw(*modelShader);*/
-            ;
+            otherModels[i]->draw(*modelShader);
         }
 
         testPlane->draw(*playerShader);
-
-        otherModels[4]->draw(*modelShader);
 
 
         skybox->draw(*skyboxShader);

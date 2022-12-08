@@ -107,7 +107,7 @@ public:
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
-        spotLight = new SpotLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), 12.5);
+        spotLight = new SpotLight(0.5, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, playerModel->position + playerModel->direction * 5.0f, glm::vec3(0, 0, -1), 12.5);
 
         //create a directional light with a position of (4, 11, -3)
         directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
@@ -149,7 +149,7 @@ public:
         firstPerspectiveCamera->updateFields(playerModel->position, playerModel->direction);
         thirdPerspectiveCamera->updateFields(playerModel->position);
 
-        spotLight->updateFields(playerModel->position, playerModel->direction);
+        spotLight->updateFields(playerModel->position + playerModel->direction * 5.0f, playerModel->direction);
 
         updateShader(*playerShader);
         updateShader(*modelShader);

@@ -29,8 +29,8 @@ public:
         
         // values from https ://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
         constant = 1.0f;
-        linear = 0.0014f;
-        quadratic = 0.000007f;
+        linear = 0.045f;
+        quadratic = 0.0075f;
 
         revolution = glm::vec3(0.0f, 0.0f, 0.0f);
         initPosition = position;

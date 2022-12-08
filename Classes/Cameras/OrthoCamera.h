@@ -3,9 +3,14 @@
 
 class OrthoCamera : public MyCamera {
 public:
+    float xLast, yLast; //stores the last cursor position
+    bool isInitialized;//checks if the values of xLast and yLast have been initialized
 
     //constructor for the orthographic camera class
-    OrthoCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) : MyCamera(position, target, up) { }
+    OrthoCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) : MyCamera(position, target, up) {
+        xLast = yLast = 0.0f;
+        isInitialized = false;
+    }
 
     //set the value of the projection matrix in the shader
     void setProjectionMatrix(Shader shader) override {
@@ -44,4 +49,31 @@ public:
             target.x -= sensitivity;
         }
     }
+
+    //process the mouse inputs and updates the object attributes
+    void processMouse(float xPos, float yPos) {
+        //initialize the value of xLast and yLast
+        if (!isInitialized) {
+            xLast = xPos;
+            yLast = yPos;
+            isInitialized = true;
+        }
+
+        float sensitivity = 0.01f; //controls rotation senstivity
+
+        //compute the displacement from the previous position
+        float xDiff = xPos - xLast;
+        float yDiff = yLast - yPos;
+
+        //update the last position
+        xLast = xPos;
+        yLast = yPos;
+
+        position.x += xDiff * sensitivity;
+        target.x += xDiff * sensitivity;
+
+        position.z -= yDiff * sensitivity;
+        target.z -= yDiff * sensitivity;
+    }
+
 };

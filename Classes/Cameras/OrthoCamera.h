@@ -51,7 +51,7 @@ public:
     }
 
     //process the mouse inputs and updates the object attributes
-    void processMouse(float xPos, float yPos) {
+    void processMouse(float xPos, float yPos, bool isValid) {
         //initialize the value of xLast and yLast
         if (!isInitialized) {
             xLast = xPos;
@@ -69,12 +69,15 @@ public:
         xLast = xPos;
         yLast = yPos;
 
-        //update camera position and target based on camera movement
-        position.x += xDiff * sensitivity;
-        target.x += xDiff * sensitivity;
+        // update only when the mouse movement is valid(i.e., cursor was used to drag the view)
+        if (isValid) {
+            //update camera position and target based on camera movement
+            position.x += xDiff * sensitivity;
+            target.x += xDiff * sensitivity;
 
-        position.z -= yDiff * sensitivity;
-        target.z -= yDiff * sensitivity;
+            position.z -= yDiff * sensitivity;
+            target.z -= yDiff * sensitivity;
+        }
     }
 
 };

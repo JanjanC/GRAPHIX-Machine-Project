@@ -51,8 +51,8 @@ public:
     PerspectiveCamera* firstPerspectiveCamera;
     OrthoCamera* orthoCamera;
     MyCamera* activeCamera;
-    int cameraIndex = 0;
     int lastPerspective = 3;
+    bool isMouseClicked = false;
 
     Player* testPlane;
 
@@ -288,15 +288,36 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 }
 
 //callback function for cursor movement
-void Mouse_Callback(GLFWwindow* window, double xPos, double yPos) {
+void Cursor_Callback(GLFWwindow* window, double xPos, double yPos) {
     //move the camera view for the third person perspective camera
     if (environment->activeCamera == environment->thirdPerspectiveCamera) {
-        environment->thirdPerspectiveCamera->processMouse(xPos, yPos);
+        environment->thirdPerspectiveCamera->processMouse(xPos, yPos, environment->isMouseClicked);
     }
 
     //pan the camera view for the orthographic camera
-    if(environment->activeCamera == environment->orthoCamera) {
-        environment->orthoCamera->processMouse(xPos, yPos);
+    if (environment->activeCamera == environment->orthoCamera) {
+        environment->orthoCamera->processMouse(xPos, yPos, environment->isMouseClicked);
+    }
+    
+}
+
+void Mouse_Button_Callback(GLFWwindow* window, int button, int action, int mods) {
+
+    if (environment->activeCamera == environment->thirdPerspectiveCamera || environment->activeCamera == environment->orthoCamera) {
+
+        //implement dragging using mouse
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            environment->isMouseClicked = true;
+            //prevent the mouse from going out the window
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+
+        //implement dragging using mouse
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+            environment->isMouseClicked = false;
+            //revert to normal cursor behavior
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
     }
 }
 
@@ -326,10 +347,8 @@ int main(void)
 
     //set callbacks for key presses and cursor movement
     glfwSetKeyCallback(window, Key_Callback);
-    glfwSetCursorPosCallback(window, Mouse_Callback);
-
-    //prevent the mouse from going out the window
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, Cursor_Callback);
+    glfwSetMouseButtonCallback(window, Mouse_Button_Callback);
 
     //create an environment object which stores the models, lights, shaders, and cameras
     environment = new Environment();

@@ -60,7 +60,7 @@ public:
     }
 
     //process the mouse inputs and updates the object attributes
-    void processMouse(float xPos, float yPos) {
+    void processMouse(float xPos, float yPos, bool isValid) {
         //initialize the value of xLast and yLast
         if (!isInitialized) {
             xLast = xPos;
@@ -78,18 +78,22 @@ public:
         xLast = xPos;
         yLast = yPos;
 
-        //updates the value of the pitch and yaw
-        yaw += xDiff * sensitivity;
-        pitch += yDiff * sensitivity;
+        //update only when the mouse movement is valid (i.e., cursor was used to drag the view)
+        if (isValid) {
+            //updates the value of the pitch and yaw
+            yaw += xDiff * sensitivity;
+            pitch += yDiff * sensitivity;
 
-        //prevent lookAt flip by limiting the rotation along the x-axis to be greater than -90 deegress
-        if (pitch < -90.0f) {
-            pitch = -89.99f;
-        }
+            //prevent lookAt flip by limiting the rotation along the x-axis to be greater than -90 deegress
+            if (pitch < -90.0f) {
+                pitch = -89.99f;
+            }
 
-        //prevent lookAt flip by limiting the rotation along the x-axis to be less than 90 deegress
-        if (pitch > 90.0f) {
-            pitch = 89.99f;
+            //prevent lookAt flip by limiting the rotation along the x-axis to be less than 90 deegress
+            if (pitch > 90.0f) {
+                pitch = 89.99f;
+            }
         }
+        
     }
 };

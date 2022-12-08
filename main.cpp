@@ -54,8 +54,6 @@ public:
     int lastPerspective = 3;
     bool isMouseClicked = false;
 
-    Player* testPlane;
-
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
 
@@ -104,11 +102,6 @@ public:
         //load the skybox
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
-        //TODO:clean up
-        testPlane = new Player("3D/plane.obj", glm::vec3(0, 0, 0), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        testPlane->loadTexture("3D/brickwall.jpg", *playerShader, "tex0");
-        testPlane->loadTexture("3D/brickwall_normal.jpg", *playerShader, "norm_tex");
-
         //create a spotlight in front of the submarine
         spotLight = new SpotLight(0.05f, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, playerModel->position + playerModel->direction * 1.0f, glm::vec3(0, 0, -1), 12.5);
 
@@ -138,6 +131,10 @@ public:
     ~Environment() {
         //deallocates the objects from the memory
         delete playerModel;
+        for (int i = 0; i < otherModels.size(); i++) {
+            delete otherModels[i];
+        }
+        delete skybox;
         delete spotLight;
         delete directionalLight;
         delete playerShader;

@@ -47,6 +47,11 @@ public:
         this->target = target;
     }
 
+    void updateFields(glm::vec3 position) {
+        this->position = position + computeAngle();;
+        this->target = position;
+    }
+
     //process the mouse inputs and updates the object attributes
     void processMouse(float xPos, float yPos) {
         //initialize the value of xLast and yLast
@@ -78,8 +83,12 @@ public:
         //prevent lookAt flip by limiting the rotation along the x-axis to be less than 90 deegress
         if (pitch > 90.0f) {
             pitch = 89.99f;
-        }
+        }    
 
+        position = position + computeAngle();
+    }
+
+    glm::vec3 computeAngle() {
         //recompute the position of the camera depending on the values of yaw and pitch
         glm::vec3 newPosition;
         newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
@@ -89,37 +98,6 @@ public:
         newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
 
         //update the camera position
-        position = newPosition;        
-    }
-
-    void processKeyboard(int key, float theta, glm::vec3 model) {
-        float vert_sensitivity = 0.2f;
-        float horz_sensitivity = 0.4f;
-
-        //update the direction of the model
-        glm::vec3 direction = glm::normalize(glm::vec3(sin(glm::radians(theta)), 0, cos(glm::radians(theta))));
-
-        if (key == GLFW_KEY_Q || key == GLFW_KEY_E) {
-            /*Elevate*/
-            if (key == GLFW_KEY_Q && position.y) {
-                position.y += vert_sensitivity;
-            }
-            /*Descend*/
-            if (key == GLFW_KEY_E) {
-                position.y -= vert_sensitivity;
-            }
-        }
-        /*Traverse Forward*/
-        if (key == GLFW_KEY_W) {
-            position += direction * horz_sensitivity;
-            target += direction * horz_sensitivity;
-        }
-        /*Traverse Backward*/
-        if (key == GLFW_KEY_S) {
-            position -= direction * horz_sensitivity;
-            target -= direction * horz_sensitivity;
-        }
-
-        target = model;
+        return newPosition;
     }
 };

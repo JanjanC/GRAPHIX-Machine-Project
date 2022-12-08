@@ -12,7 +12,7 @@ public:
     float yaw; //the rotation of the camera around the y axis
 
     //constructor for the perspective camera class
-    PerspectiveCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) : MyCamera(position, target, up) {
+    PerspectiveCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up, float zNear, float zFar) : MyCamera(position, target, up, zNear, zFar) {
         //initialize values for mouse position
         xLast = yLast = 0.0f;
         isInitialized = false;
@@ -31,8 +31,8 @@ public:
         projectionMatrix = glm::perspective(
             glm::radians(45.0f),
             WIDTH / HEIGHT,
-            0.1f,
-            100.f
+            zNear,
+            zFar
         );
 
         //set the value of the projection matrix in the shader

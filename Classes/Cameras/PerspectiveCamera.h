@@ -48,7 +48,15 @@ public:
     }
 
     void updateFields(glm::vec3 position) {
-        this->position = position + computeAngle();;
+        //recompute the position of the camera depending on the values of yaw and pitch
+        glm::vec3 newPosition;
+        newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
+        newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
+        newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
+
+        newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
+
+        this->position = position + newPosition;
         this->target = position;
     }
 
@@ -83,21 +91,6 @@ public:
         //prevent lookAt flip by limiting the rotation along the x-axis to be less than 90 deegress
         if (pitch > 90.0f) {
             pitch = 89.99f;
-        }    
-
-        position = position + computeAngle();
-    }
-
-    glm::vec3 computeAngle() {
-        //recompute the position of the camera depending on the values of yaw and pitch
-        glm::vec3 newPosition;
-        newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
-        newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
-        newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
-
-        newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
-
-        //update the camera position
-        return newPosition;
+        }
     }
 };

@@ -42,18 +42,19 @@ public:
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     }
 
-    void updateFields(glm::vec3 position, glm::vec3 target) {
+    //update the fields for the first perspective camera
+    void updateFields(glm::vec3 position, glm::vec3 direction) {
         this->position = position;
-        this->target = target;
+        this->target = position + distance * direction;
     }
 
+    //update the fields for the third perspective camera
     void updateFields(glm::vec3 position) {
         //recompute the position of the camera depending on the values of yaw and pitch
         glm::vec3 newPosition;
         newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
         newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
         newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
-
         newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
 
         this->position = position + newPosition;

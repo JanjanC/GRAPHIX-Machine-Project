@@ -119,7 +119,7 @@ public:
 
     //updates the uniform values of the shader files and draws the objects on the screen
     void updateScreen() {        
-        firstPerspectiveCamera->updateFields(mainModel->position, mainModel->position + 5.0f * mainModel->direction);
+        firstPerspectiveCamera->updateFields(mainModel->position, mainModel->direction);
         thirdPerspectiveCamera->updateFields(mainModel->position);
 
         spotLight->updateFields(mainModel->position, mainModel->direction);

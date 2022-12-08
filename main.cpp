@@ -167,6 +167,7 @@ public:
         //update the skybox based on the camera perspective
         skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
         skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
+        skybox->setTransformationMatrix(*skyboxShader);
 
         //draws the objects on the screens
         //TODO: cleanup

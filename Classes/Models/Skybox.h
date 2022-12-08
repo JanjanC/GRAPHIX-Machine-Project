@@ -150,20 +150,23 @@ public:
     void setViewMatrix(Shader shader, glm::mat4 viewMatrix) {
         shader.useProgram();
 
-        // scale the size of the cube map
-        float scale_x, scale_y, scale_z;
-        scale_x = scale_y = scale_z = HEIGHT / 50 + 2.0f;
-
         // remove the translations
         glm::mat4 sky_view = glm::mat4(1.f);
         sky_view = glm::mat4(glm::mat3(viewMatrix));
 
-        // scale the size of the skybox
-        sky_view = glm::scale(sky_view, glm::vec3(scale_x, scale_y, scale_z));
-
         // set the value of the view matrix in the shader
         unsigned int viewLoc = glGetUniformLocation(shader.shaderProgram, "view");
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(sky_view));
+    }
+
+    void setTransformationMatrix(Shader shader) {
+        glm::mat4 transformation_matrix = glm::mat4(1.0f);
+        // scale the size of the skybox
+        float scale  = HEIGHT / 50 + 2.0f;
+        transformation_matrix = glm::scale(transformation_matrix, glm::vec3(scale, scale, scale));
+        
+        unsigned int transformLoc = glGetUniformLocation(shader.shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformation_matrix));
     }
 
     void draw(Shader shader) {

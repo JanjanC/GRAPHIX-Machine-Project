@@ -116,7 +116,7 @@ public:
         directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
 
         //create a third person perspective camera
-        thirdPerspectiveCamera = new PerspectiveCamera(playerModel->position - 5.0f * playerModel->direction, playerModel->position, glm::vec3(0, 1.0f, 0), 0.1f, 100.0f);
+        thirdPerspectiveCamera = new PerspectiveCamera(playerModel->position - 5.0f * playerModel->direction, playerModel->position, glm::vec3(0, 1.0f, 0), 0.1f, 40.0f);
 
         //create a first person perspective camera
         firstPerspectiveCamera = new PerspectiveCamera(playerModel->position, playerModel->position + 5.0f * playerModel->direction, glm::vec3(0, 1.0f, 0), 0.1f, 100.0f);

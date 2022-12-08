@@ -7,7 +7,7 @@ public:
     bool isInitialized;//checks if the values of xLast and yLast have been initialized
 
     //constructor for the orthographic camera class
-    OrthoCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) : MyCamera(position, target, up) {
+    OrthoCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up, float zNear, float zFar) : MyCamera(position, target, up, zNear, zFar) {
         xLast = yLast = 0.0f;
         isInitialized = false;
     }
@@ -17,7 +17,7 @@ public:
         shader.useProgram();
 
         //compute for the projection matrix
-        projectionMatrix = glm::ortho(-WIDTH / 50, WIDTH / 50, -HEIGHT / 50, HEIGHT / 50, -100.0f, 100.0f);
+        projectionMatrix = glm::ortho(-WIDTH / 50, WIDTH / 50, -HEIGHT / 50, HEIGHT / 50, zNear, zFar);
 
         //set the value of the projection matrix in the shader
         unsigned int projectionLoc = glGetUniformLocation(shader.shaderProgram, "projection");

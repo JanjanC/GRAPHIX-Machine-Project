@@ -6,15 +6,18 @@ public:
     glm::vec3 position; //position of the camera in the world
     glm::vec3 target; //position of the target in the world
     glm::vec3 up; //the world up vector
+    float zNear, zFar;
     float distance; //distance from the camera to the target
-    glm::mat4 viewMatrix;
-    glm::mat4 projectionMatrix;
+    glm::mat4 viewMatrix; //view matrix
+    glm::mat4 projectionMatrix; //projection matrix
 
     //constructor for the camera class
-    MyCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) {
+    MyCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up, float zNear, float zFar) {
         this->position = position;
         this->target = target;
         this->up = up;
+        this->zNear = zNear;
+        this->zFar = zFar;
         distance = glm::length(target - position); //computes for the distance from the camera to its target
     }
 

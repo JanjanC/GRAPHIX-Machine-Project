@@ -40,7 +40,7 @@ class Environment {
 
 public:
     Player* playerModel;
-    Model* otherModel;
+    std::vector<Model*> otherModels;
     Skybox *skybox;
     SpotLight* spotLight;
     DirectionalLight* directionalLight;
@@ -72,8 +72,18 @@ public:
         playerModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
         playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
-        otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        otherModel->loadTexture("3D/ayaya.png", *modelShader, "tex0");
+        Model* model;
+        model = new Model("3D/megalodon.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/megalodon_texture.png", *modelShader, "tex0");
+        otherModels.push_back(model);
+
+        model = new Model("3D/turtle.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/turtle_texture.png", *modelShader, "tex0");
+        otherModels.push_back(model);
+
+        model = new Model("3D/enemy_submarine.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/enemy_submarine_texture.png", *modelShader, "tex0");
+        otherModels.push_back(model);
 
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
@@ -141,7 +151,11 @@ public:
             glDisable(GL_BLEND);
             playerModel->draw(*playerShader);
         }
-        otherModel->draw(*modelShader);
+        for (int i = 0; i < otherModels.size(); i++) {
+            otherModels[i]->draw(*modelShader);
+        }
+
+
         skybox->draw(*skyboxShader);
     }
 

@@ -91,8 +91,8 @@ public:
         model->loadTexture("3D/seahorse_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
-        model = new Model("3D/whale_shark.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        model->loadTexture("3D/whale_shark_texture.png", *modelShader, "tex0");
+        model = new Model("3D/starfish.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/starfish_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
         
         model = new Model("3D/koi_fish.obj", glm::vec3(1.0f, 0.0f, 50.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -104,7 +104,6 @@ public:
         testPlane = new Player("3D/plane.obj", glm::vec3(0, 0, 0), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         testPlane->loadTexture("3D/brickwall.jpg", *playerShader, "tex0");
         testPlane->loadTexture("3D/brickwall_normal.jpg", *playerShader, "norm_tex");
-
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)

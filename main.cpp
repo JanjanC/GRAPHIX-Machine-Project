@@ -44,7 +44,8 @@ public:
     Skybox *skybox;
     SpotLight* spotLight;
     DirectionalLight* directionalLight;
-    Shader* mainShader;
+    Shader* playerShader;
+    Shader* modelShader;
     Shader* skyboxShader;
     PerspectiveCamera* thirdPerspectiveCamera;
     PerspectiveCamera* firstPerspectiveCamera;
@@ -56,8 +57,11 @@ public:
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
 
-        //load the shader for the main object
-        mainShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
+        //load the shader for the players
+        playerShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
+
+        //load the shader for the models
+        modelShader = new Shader("Shaders/model.vert", "Shaders/model.frag");
 
         //load the shader for the skybox
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
@@ -65,11 +69,11 @@ public:
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
         mainModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
-        mainModel->loadTexture("3D/submarine_texture.png", *mainShader, "tex0");
-        mainModel->loadTexture("3D/submarine_normal.png", *mainShader, "norm_tex");
+        mainModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
+        mainModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
-        otherModel->loadTexture("3D/ayaya.png", *mainShader, "tex0");
+        otherModel->loadTexture("3D/ayaya.png", *modelShader, "tex0");
         //otherModel->loadTexture("3D/bird_normal.jpg", *mainShader, "norm_tex");
 
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
@@ -105,46 +109,57 @@ public:
         delete mainModel;
         delete spotLight;
         delete directionalLight;
-        delete mainShader;
+        delete playerShader;
+        delete modelShader;
+        delete skyboxShader;
         delete thirdPerspectiveCamera;
+        delete firstPerspectiveCamera;
         delete orthoCamera;
     }
 
     //updates the uniform values of the shader files and draws the objects on the screen
-    void update() {        
+    void updateScreen() {        
         firstPerspectiveCamera->updateFields(mainModel->position, mainModel->position + 5.0f * mainModel->direction);
         thirdPerspectiveCamera->updateFields(mainModel->position);
 
-        //updates the uniform values
-        activeCamera->setViewMatrix(*mainShader);
-        activeCamera->setProjectionMatrix(*mainShader);
-        activeCamera->setCameraPosition(*mainShader);
-
         spotLight->updateFields(mainModel->position, mainModel->direction);
-        spotLight->setAmbientStr(*mainShader);
-        spotLight->setSpecStr(*mainShader);
-        spotLight->setSpecPhong(*mainShader);
-        spotLight->setLightColor(*mainShader);
-        spotLight->setLightIntensity(*mainShader);
-        spotLight->setLightPosition(*mainShader);
-        spotLight->setLightDirection(*mainShader);
-        spotLight->setAttenuationConstants(*mainShader);
-        spotLight->setCutoff(*mainShader);
 
-        directionalLight->setAmbientStr(*mainShader);
-        directionalLight->setSpecStr(*mainShader);
-        directionalLight->setSpecPhong(*mainShader);
-        directionalLight->setLightColor(*mainShader);
-        directionalLight->setLightIntensity(*mainShader);
-        directionalLight->setLightDirection(*mainShader);
+        updateShader(*playerShader);
+        updateShader(*modelShader);
 
         skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
         skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
 
         //draws the objects on the screens
-        mainModel->draw(*mainShader);
-        otherModel->draw(*mainShader);
+        mainModel->draw(*playerShader);
+        otherModel->draw(*modelShader);
         skybox->draw(*skyboxShader);
+    }
+
+    void updateShader(Shader shader) {
+
+        //updates the uniform values
+        activeCamera->setViewMatrix(shader);
+        activeCamera->setProjectionMatrix(shader);
+        activeCamera->setCameraPosition(shader);
+
+
+        spotLight->setAmbientStr(shader);
+        spotLight->setSpecStr(shader);
+        spotLight->setSpecPhong(shader);
+        spotLight->setLightColor(shader);
+        spotLight->setLightIntensity(shader);
+        spotLight->setLightPosition(shader);
+        spotLight->setLightDirection(shader);
+        spotLight->setAttenuationConstants(shader);
+        spotLight->setCutoff(shader);
+
+        directionalLight->setAmbientStr(shader);
+        directionalLight->setSpecStr(shader);
+        directionalLight->setSpecPhong(shader);
+        directionalLight->setLightColor(shader);
+        directionalLight->setLightIntensity(shader);
+        directionalLight->setLightDirection(shader);
     }
 };
 
@@ -282,7 +297,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //update the uniform values in the shaders and draw the object on the screen
-        environment->update();
+        environment->updateScreen();
 
         //swap front and back buffers
         glfwSwapBuffers(window);

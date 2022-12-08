@@ -164,7 +164,6 @@ public:
         skybox->setTransformationMatrix(*skyboxShader);
 
         //draws the objects on the screens
-        //TODO: cleanup
         if (activeCamera == firstPerspectiveCamera) {
             //set the objects to a shade of color
             glEnable(GL_BLEND);

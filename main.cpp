@@ -20,8 +20,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 //width and height of the window
-#define WIDTH 600.0f
-#define HEIGHT 600.0f
+#define WIDTH 720.0f
+#define HEIGHT 720.0f
 
 /* Model Class */
 #include "Classes/Models/Model.h"
@@ -70,7 +70,7 @@ public:
 
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        playerModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
+        playerModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.00375f, 0.00375f, 0.00375f), glm::vec3(0.0f, 0.0f, 0.0f));
         playerModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
         playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
@@ -149,7 +149,7 @@ public:
         firstPerspectiveCamera->updateFields(playerModel->position, playerModel->direction);
         thirdPerspectiveCamera->updateFields(playerModel->position);
 
-        spotLight->updateFields(playerModel->position + playerModel->direction * 2.0f, playerModel->direction);
+        spotLight->updateFields(playerModel->position + playerModel->direction * 1.0f, playerModel->direction);
 
         updateShader(*playerShader);
         updateShader(*modelShader);
@@ -169,10 +169,11 @@ public:
             glDisable(GL_BLEND);
             playerModel->draw(*playerShader);
         }
+        
         for (int i = 0; i < otherModels.size(); i++) {
             otherModels[i]->draw(*modelShader);
         }
-
+        
         testPlane->draw(*playerShader);
 
 

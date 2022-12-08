@@ -111,9 +111,7 @@ public:
     }
 
     //updates the uniform values of the shader files and draws the objects on the screen
-    void update() {
-
-        thirdPerspectiveCamera->updateFields(mainModel->position - 5.0f * mainModel->direction, mainModel->position);
+    void update() {        
         firstPerspectiveCamera->updateFields(mainModel->position, mainModel->position + 5.0f * mainModel->direction);
 
         //updates the uniform values
@@ -176,7 +174,9 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
         /* Insert a flag for the camera being used e.g. camera is 1st person or 3rd person */
         if (environment->activeCamera == environment->thirdPerspectiveCamera || environment->activeCamera == environment->firstPerspectiveCamera) {
-            environment->mainModel->processKeyboard(key);
+            environment->mainModel->processKeyboard(key);    
+            environment->thirdPerspectiveCamera->processKeyboard(key, environment->mainModel->theta.y, environment->mainModel->position);
+            //mainModel->position - 5.0f * mainModel->direction, mainModel->position
         }
         /* Birds-eye view */
         if (environment->activeCamera == environment->orthoCamera) {

@@ -80,23 +80,46 @@ public:
             pitch = 89.99f;
         }
 
-        ////recompute the position of the camera depending on the values of yaw and pitch
-        //glm::vec3 newPosition;
-        //newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
-        //newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
-        //newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
+        //recompute the position of the camera depending on the values of yaw and pitch
+        glm::vec3 newPosition;
+        newPosition.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
+        newPosition.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
+        newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
 
-        //newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
+        newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
 
-        ////update the camera position
-        //position = newPosition;
-        glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch)); //the x component is influenced by the x component of the yaw and pitch
-        front.y = sin(glm::radians(pitch)); //the y component is influenced by the y component of the pitch
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the y component is influenced by the y component of the yaw and the x component of the pitch
+        //update the camera position
+        position = newPosition;        
+    }
 
-        front = glm::normalize(front); //ensure that the distance between the camera and the target relative to the camera position is always 1 unit
-    
-        target = position + 10.0f * front;
+    void processKeyboard(int key, float theta, glm::vec3 model) {
+        float vert_sensitivity = 0.2f;
+        float horz_sensitivity = 0.4f;
+
+        //update the direction of the model
+        glm::vec3 direction = glm::normalize(glm::vec3(sin(glm::radians(theta)), 0, cos(glm::radians(theta))));
+
+        if (key == GLFW_KEY_Q || key == GLFW_KEY_E) {
+            /*Elevate*/
+            if (key == GLFW_KEY_Q && position.y) {
+                position.y += vert_sensitivity;
+            }
+            /*Descend*/
+            if (key == GLFW_KEY_E) {
+                position.y -= vert_sensitivity;
+            }
+        }
+        /*Traverse Forward*/
+        if (key == GLFW_KEY_W) {
+            position += direction * horz_sensitivity;
+            target += direction * horz_sensitivity;
+        }
+        /*Traverse Backward*/
+        if (key == GLFW_KEY_S) {
+            position -= direction * horz_sensitivity;
+            target -= direction * horz_sensitivity;
+        }
+
+        target = model;
     }
 };

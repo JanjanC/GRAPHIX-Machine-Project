@@ -55,7 +55,7 @@ public:
         newPosition.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));//the z component is influenced by the y component of the yaw and the x component of the pitch
         newPosition = distance * glm::normalize(newPosition); //ensure that the distance between the camera and the target relative to the camera position is always the same
 
-        this->position = position + newPosition;
+        this->position = position - newPosition;
         this->target = position;
     }
 

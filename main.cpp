@@ -309,7 +309,7 @@ int main(void)
         return -1;
 
     //create a windowed mode window and its OpenGL context
-    window = glfwCreateWindow(WIDTH, HEIGHT, "Programming Challenge 2 - John Vincent Chua", NULL, NULL);
+    window = glfwCreateWindow(WIDTH, HEIGHT, "[Group 24] GRAPHIX Machine Project - No Man's Submarine", NULL, NULL);
 
     //terminate the program if a window is not created
     if (!window)

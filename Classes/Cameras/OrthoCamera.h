@@ -30,23 +30,23 @@ public:
 
         // traverse forward
         if (key == GLFW_KEY_W) {           
-            position.z += sensitivity;
-            target.z += sensitivity;
-        }
-        // traverse backward
-        if (key == GLFW_KEY_S) {
             position.z -= sensitivity;
             target.z -= sensitivity;
         }
+        // traverse backward
+        if (key == GLFW_KEY_S) {
+            position.z += sensitivity;
+            target.z += sensitivity;
+        }
         // rotate to left
         if (key == GLFW_KEY_A) {
-            position.x += sensitivity;
-            target.x += sensitivity;
+            position.x -= sensitivity;
+            target.x -= sensitivity;
         }
         // rotate to right
         if (key == GLFW_KEY_D) {
-            position.x -= sensitivity;
-            target.x -= sensitivity;
+            position.x += sensitivity;
+            target.x += sensitivity;
         }
     }
 

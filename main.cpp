@@ -70,7 +70,7 @@ public:
 
         //load the main model and its textures
         //3D model taken from Free3D.com by user printable_models (link to creation: https://free3d.com/3d-model/bird-v1--875504.html)
-        playerModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.00375f, 0.00375f, 0.00375f), glm::vec3(0.0f, 0.0f, 0.0f));
+        playerModel = new Player("3D/submarine.obj", glm::vec3(0, -10, 0), glm::vec3(0.00375f, 0.00375f, 0.00375f), glm::vec3(0.0f, 0.0f, 0.0f));
         playerModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
         playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
@@ -79,11 +79,11 @@ public:
         model->loadTexture("3D/megalodon_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
-        model = new Model("3D/turtle.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model = new Model("3D/turtle.obj", glm::vec3(0.0f, -30.0f, 100.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/turtle_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
-        model = new Model("3D/enemy_submarine.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model = new Model("3D/enemy_submarine.obj", glm::vec3(40.0f, -50.0f, 20.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/enemy_submarine_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
@@ -91,11 +91,11 @@ public:
         model->loadTexture("3D/seahorse_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
-        model = new Model("3D/starfish.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model = new Model("3D/starfish.obj", glm::vec3(0.0f, -5.0f, 50.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/starfish_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
         
-        model = new Model("3D/koi.obj", glm::vec3(1.0f, 0.0f, 1.0f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model = new Model("3D/koi.obj", glm::vec3(-50.0f, 0.0f, 50.0f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/koi_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
@@ -171,8 +171,6 @@ public:
         }
         
         for (int i = 0; i < otherModels.size(); i++) {
-            otherModels[i]->position.z = 20;
-            otherModels[i]->position.x = i * 20;
             otherModels[i]->draw(*modelShader);
         }
 

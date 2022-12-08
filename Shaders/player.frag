@@ -49,6 +49,8 @@ in vec3 fragPos; //fragment position
 
 in mat3 TBN;
 
+uniform int blend;
+
 out vec4 FragColor; //output fragment color
 
 vec3 calculateDirectionalLight (DirectionalLight light) {
@@ -171,6 +173,15 @@ void main () {
 
     //calculate spot light
     total += calculateSpotLight(spotLight);
-
-    FragColor = vec4(total, 1.0f) * texture(tex0, texCoord);
+    
+    if(blend == 1) {
+        vec4 pixelColor;
+        pixelColor.r = 0.5f;
+        pixelColor.g = 1.0f;
+        pixelColor.b = 0.5f;
+        pixelColor.a = 0.3f;
+        FragColor = pixelColor;
+    } else {
+        FragColor = vec4(total, 1.0f) * texture(tex0, texCoord);
+    }    
 }

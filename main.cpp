@@ -92,6 +92,10 @@ public:
 
         activeCamera = thirdPerspectiveCamera;
 
+        /* Set up blend settings */
+        
+        glDisable(GL_BLEND);        
+
         /* print the initial info of the submarine */
         std::cout << "Submarine system initialization... COMPLETE\n";
         std::cout << "Preparing for underwater exploration...\n\n";
@@ -191,31 +195,54 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 
     //change the camera view
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+        /* If currently on first person perspective */
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
+            /* Disable Blend */
+            glEnable(GL_BLEND);
+            environment->mainModel->blend = 1;
+
             environment->activeCamera = environment->thirdPerspectiveCamera;
             environment->lastPerspective = 3;
         } 
+        /* If currently on third person perspective */
         else
         if (environment->activeCamera == environment->thirdPerspectiveCamera) {
+            /* Enable Blend */
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            glBlendEquation(GL_SUBTRACT);
+            environment->mainModel->blend = 1;
+
             environment->activeCamera = environment->firstPerspectiveCamera;
             environment->lastPerspective = 1;
         }
     }
 
-    if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_2 && action == GLFW_PRESS) {        
         /* Toggle off - the current camera is in ortho already */
         if (environment->activeCamera == environment->orthoCamera) {
             switch (environment->lastPerspective) {
                 case 1: 
+                    /* Enable Blend */
+                    glEnable(GL_BLEND);
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+                    glBlendEquation(GL_SUBTRACT);
+                    environment->mainModel->blend = 1;
                     environment->activeCamera = environment->firstPerspectiveCamera;
                     break;
                 case 3:
+                    glDisable(GL_BLEND);
+                    environment->mainModel->blend = 0;
                     environment->activeCamera = environment->thirdPerspectiveCamera;
                     break;
             }
         }
         /* Toggle on - save the last used perspective and switch the camera to ortho */
         else {
+            /* Disable Blend */
+            glDisable(GL_BLEND);
+            environment->mainModel->blend = 0;
+
             /* Set the position and target of ortho be on top of the player */
             environment->orthoCamera->position.x = environment->mainModel->position.x;
             environment->orthoCamera->target.x = environment->mainModel->position.x;            

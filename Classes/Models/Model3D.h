@@ -10,6 +10,7 @@ public:
     std::vector<GLuint> textures; //stores the list of textures used by the model
     std::vector<GLuint > textureAddresses;
     glm::vec3 position, scale, theta; //stores the information to be used for transformation
+    int blend = 0;
 
     //constructor for the model class
     Model3D(std::string modelPath, glm::vec3 position, glm::vec3 scale, glm::vec3 theta) {
@@ -116,6 +117,8 @@ public:
         unsigned int transformationLoc = glGetUniformLocation(shader.shaderProgram, "transform");
         //set the value of transform in the vertex shader
         glUniformMatrix4fv(transformationLoc, 1, GL_FALSE, glm::value_ptr(transformation_matrix));
+        unsigned int blendLoc = glGetUniformLocation(shader.shaderProgram, "blend");
+        glUniform1i(blendLoc, blend);
 
         //draw the model
         glDrawArrays(GL_TRIANGLES, 0, fullVertexData.size() / attribCount);

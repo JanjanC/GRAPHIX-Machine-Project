@@ -150,13 +150,15 @@ public:
     void setViewMatrix(Shader shader, glm::mat4 viewMatrix) {
         shader.useProgram();
 
-        //remove translations
+        // scale the size of the cube map
+        float scale_x, scale_y, scale_z;
+        scale_x = scale_y = scale_z = HEIGHT / 50 + 2.0f;
+
+        // remove the translations
         glm::mat4 sky_view = glm::mat4(1.f);
         sky_view = glm::mat4(glm::mat3(viewMatrix));
 
-        float scale_x, scale_y, scale_z;
-        scale_x = scale_y = scale_z = HEIGHT/50 + 2.0f;
-
+        // scale the size of the skybox
         sky_view = glm::scale(sky_view, glm::vec3(scale_x, scale_y, scale_z));
 
         // set the value of the view matrix in the shader

@@ -64,20 +64,4 @@ public:
         unsigned int lightDirLoc = glGetUniformLocation(shader.shaderProgram, "directionalLight.direction");
         glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDir));
     }
-
-    //process keyboard inputs and update the object attributes
-    void processKeyboard(int key) {
-        float sensitivity = 0.025;
-
-        //increase the light intensity
-        if (key == GLFW_KEY_RIGHT) {
-            lightIntensity += sensitivity;
-        }
-
-        //decrease the light intensity
-        if (key == GLFW_KEY_LEFT) {
-            lightIntensity -= sensitivity;
-            lightIntensity = glm::max(lightIntensity, 0.0f); //prevent negative intensity
-        }
-    }
 };

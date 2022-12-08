@@ -13,16 +13,14 @@ public:
 
     //constructor for the perspective camera class
     PerspectiveCamera(glm::vec3 position, glm::vec3 target, glm::vec3 up) : MyCamera(position, target, up) {
+        //initialize values for mouse position
         xLast = yLast = 0.0f;
         isInitialized = false;
 
-        //target = position + front;
-        //front = target - position;
-
-        distance = glm::length(position - target);
-
         pitch = 0.0f;
         yaw = -90.0f;
+
+        distance = glm::length(position - target); //calculate the distance from the camera to the target
     }
 
     //set the value of the projection matrix in the shader

@@ -28,22 +28,22 @@ public:
     void processKeyboard(int key) {
         float sensitivity = 1.0f;
 
-        /*Traverse Forward*/
+        // traverse forward
         if (key == GLFW_KEY_W) {           
             position.z += sensitivity;
             target.z += sensitivity;
         }
-        /*Traverse Backward*/
+        // traverse backward
         if (key == GLFW_KEY_S) {
             position.z -= sensitivity;
             target.z -= sensitivity;
         }
-        /*Rotate to left*/
+        // rotate to left
         if (key == GLFW_KEY_A) {
             position.x += sensitivity;
             target.x += sensitivity;
         }
-        /*Rotate to right*/
+        // rotate to right
         if (key == GLFW_KEY_D) {
             position.x -= sensitivity;
             target.x -= sensitivity;
@@ -69,6 +69,7 @@ public:
         xLast = xPos;
         yLast = yPos;
 
+        //update camera position and target based on camera movement
         position.x += xDiff * sensitivity;
         target.x += xDiff * sensitivity;
 

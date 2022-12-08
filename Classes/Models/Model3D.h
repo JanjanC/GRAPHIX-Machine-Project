@@ -8,7 +8,7 @@ public:
     int attribCount; //the number of attributes in a set of vertex in fullVertexData
     GLuint VAO, VBO; //vao and vbo id of the model
     std::vector<GLuint> textures; //stores the list of textures used by the model
-    std::vector<GLuint > textureAddresses;
+    std::vector<GLuint > textureAddresses; //stores the list of texture addresses in the shader
     glm::vec3 position, scale, theta; //stores the information to be used for transformation
 
     //constructor for the model class

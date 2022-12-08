@@ -23,16 +23,16 @@
 #define WIDTH 720.0f
 #define HEIGHT 720.0f
 
-/* Model Class */
+// Model Class
 #include "Classes/Models/Model.h"
 #include "Classes/Models/Player.h"
 #include "Classes/Models/Skybox.h"
 
-/* Camera Classes */
+// Camera Classes
 #include "Classes/Cameras/PerspectiveCamera.h"
 #include "Classes/Cameras/OrthoCamera.h"
 
-/* Light Classes */
+// Light Classes
 #include "Classes/Light/DirectionalLight.h"
 #include "Classes/Light/SpotLight.h"
 
@@ -75,6 +75,7 @@ public:
         playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
         Model* model;
+        //load the megalodon model and its textures
         model = new Model("3D/megalodon.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/megalodon_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
@@ -87,6 +88,7 @@ public:
         model->loadTexture("3D/enemy_submarine_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        //load the seahore model and its textures
         model = new Model("3D/seahorse.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/seahorse_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
@@ -99,17 +101,18 @@ public:
         model->loadTexture("3D/koi_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        //load the skybox
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
+        //TODO:clean up
         testPlane = new Player("3D/plane.obj", glm::vec3(0, 0, 0), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         testPlane->loadTexture("3D/brickwall.jpg", *playerShader, "tex0");
         testPlane->loadTexture("3D/brickwall_normal.jpg", *playerShader, "norm_tex");
 
-        //create a point light and load the sphere object
-        //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
+        //create a spotlight in front of the submarine
         spotLight = new SpotLight(0.05f, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, playerModel->position + playerModel->direction * 1.0f, glm::vec3(0, 0, -1), 12.5);
 
-        //create a directional light with a position of (4, 11, -3)
+        //create a directional light coming from the top
         directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
 
         //create a third person perspective camera
@@ -118,12 +121,13 @@ public:
         //create a first person perspective camera
         firstPerspectiveCamera = new PerspectiveCamera(playerModel->position, playerModel->position + 5.0f * playerModel->direction, glm::vec3(0, 1.0f, 0));
 
-        //create a orthographic camera
+        //create an orthographic camera looking down from the top
         orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, -0.1f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
+        //set the third person perspective camera as the active camera
         activeCamera = thirdPerspectiveCamera;
 
-        /* print the initial info of the submarine */
+        // print the initial info of the submarine
         std::cout << "Submarine system initialization... COMPLETE\n";
         std::cout << "Preparing for underwater exploration...\n\n";
         std::cout << "[SUBMARINE STATUS]\n";
@@ -146,44 +150,55 @@ public:
 
     //updates the uniform values of the shader files and draws the objects on the screen
     void updateScreen() {
+        //update the position and target of the camera based on the player position
         firstPerspectiveCamera->updateFields(playerModel->position, playerModel->direction);
         thirdPerspectiveCamera->updateFields(playerModel->position);
 
+        //update the spot light based on the player position
         spotLight->updateFields(playerModel->position + playerModel->direction * 1.0f, playerModel->direction);
 
+        //update the player and model shader
         updateShader(*playerShader);
         updateShader(*modelShader);
 
+        //update the skybox based on the camera perspective
         skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
         skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
+        skybox->setTransformationMatrix(*skyboxShader);
 
         //draws the objects on the screens
         //TODO: cleanup
         if (activeCamera == firstPerspectiveCamera) {
+            //set the objects to a shade of color
             glEnable(GL_BLEND);
             glBlendFunc(GL_CONSTANT_COLOR, GL_CONSTANT_COLOR);
             glBlendEquation(GL_FUNC_ADD);
             glBlendColor(0.0f, 0.41f, 0.58f, 1.000);
         }
         else {
+            //disable blending and draw the player model
             glDisable(GL_BLEND);
             playerModel->draw(*playerShader);
         }
         
+        //draw all the other models
         for (int i = 0; i < otherModels.size(); i++) {
             otherModels[i]->draw(*modelShader);
         }
 
+        //draw the skybox
         skybox->draw(*skyboxShader);
     }
 
+    //updates the uniform values in the shader file
     void updateShader(Shader shader) {
 
-        //updates the uniform values
+        //updates the uniform values of the active camera
         activeCamera->setViewMatrix(shader);
         activeCamera->setProjectionMatrix(shader);
         activeCamera->setCameraPosition(shader);
 
+        //updates the uniform values of the spot light
         spotLight->setAmbientStr(shader);
         spotLight->setSpecStr(shader);
         spotLight->setSpecPhong(shader);
@@ -194,6 +209,7 @@ public:
         spotLight->setAttenuationConstants(shader);
         spotLight->setCutoff(shader);
 
+        //updates the uniform values of the directional light
         directionalLight->setAmbientStr(shader);
         directionalLight->setSpecStr(shader);
         directionalLight->setSpecPhong(shader);
@@ -210,9 +226,9 @@ Environment* environment; //pointer to the environment object
 //callback function for key presses
 void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mods) {
 
-    /* Player Control Movement */
+    // player movement
     if ((key == GLFW_KEY_W || key == GLFW_KEY_S || key == GLFW_KEY_A || key == GLFW_KEY_D || key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_REPEAT) {
-        /* Insert a flag for the camera being used e.g. camera is 1st person or 3rd person */
+        // insert a flag for the camera being used e.g. camera is 1st person or 3rd person
         if (environment->activeCamera == environment->thirdPerspectiveCamera || environment->activeCamera == environment->firstPerspectiveCamera) {
             environment->playerModel->processKeyboard(key);
         }
@@ -222,12 +238,12 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         }
     }
 
-    //cycle the light intensity
+    // cycle the light intensity
     if (key == GLFW_KEY_F && action == GLFW_PRESS) {
         environment->spotLight->processKeyboard(key);
     }
 
-    //change the camera view
+    // change the camera view
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
             environment->activeCamera = environment->thirdPerspectiveCamera;
@@ -241,7 +257,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
     }
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
-        /* Toggle off - the current camera is in ortho already */
+        // toggle off - the current camera is in ortho already
         if (environment->activeCamera == environment->orthoCamera) {
             switch (environment->lastPerspective) {
                 case 1:
@@ -252,20 +268,20 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
                     break;
             }
         }
-        /* Toggle on - save the last used perspective and switch the camera to ortho */
+        // toggle on - save the last used perspective and switch the camera to ortho
         else {
-            /* Set the position and target of ortho be on top of the player */
+            // set the position and target of ortho be on top of the player
             environment->orthoCamera->position.x = environment->playerModel->position.x;
             environment->orthoCamera->target.x = environment->playerModel->position.x;
             environment->orthoCamera->position.z = environment->playerModel->position.z - 0.1f; // 0.1f subtraction to avoid looking straight down exactly
             environment->orthoCamera->target.z = environment->playerModel->position.z;
 
-            /* Set the camera to switch to ortho */
+            // set the camera to switch to ortho
             environment->activeCamera = environment->orthoCamera;
         }
     }
 
-    /* Escaping the game */
+    // escaping the game
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
@@ -273,10 +289,12 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
 
 //callback function for cursor movement
 void Mouse_Callback(GLFWwindow* window, double xPos, double yPos) {
+    //move the camera view for the third person perspective camera
     if (environment->activeCamera == environment->thirdPerspectiveCamera) {
         environment->thirdPerspectiveCamera->processMouse(xPos, yPos);
     }
 
+    //pan the camera view for the orthographic camera
     if(environment->activeCamera == environment->orthoCamera) {
         environment->orthoCamera->processMouse(xPos, yPos);
     }

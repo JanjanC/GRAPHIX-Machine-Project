@@ -12,10 +12,6 @@ public:
     float constant;
     float linear;
     float quadratic;
-
-    glm::vec3 revolution; //stores the theta values of the revolution around the origin
-    glm::vec3 initPosition; //stores the initial position of the point light
-    bool isActive; //indiciate if the light is selected
     
     int intensityLevel;
 
@@ -32,17 +28,12 @@ public:
         linear = 0.045f;
         quadratic = 0.0075f;
 
-        revolution = glm::vec3(0.0f, 0.0f, 0.0f);
-        initPosition = position;
-
-        isActive = false;
         intensityLevel = 0;
     }
 
     void updateFields(glm::vec3 position, glm::vec3 direction) {
         this->position = position;
         this->direction = direction;
-
     }
 
     //set the value of the ambient strength in the shader
@@ -136,59 +127,6 @@ public:
 
     //process keyboard inputs and update the object attributes
     void processKeyboard(int key) {
-
-        float revSensitivity = 5.0;
-
-        //revolve around the x axis
-        if (key == GLFW_KEY_W) {
-            revolution.x -= revSensitivity;
-        }
-
-        if (key == GLFW_KEY_S) {
-            revolution.x += revSensitivity;
-        }
-
-        //revolve around the y axis
-        if (key == GLFW_KEY_A) {
-            revolution.y -= revSensitivity;
-        }
-
-        if (key == GLFW_KEY_D) {
-            revolution.y += revSensitivity;
-        }
-
-        //revolve around the z axis
-        if (key == GLFW_KEY_Q) {
-            revolution.z -= revSensitivity;
-        }
-
-        if (key == GLFW_KEY_E) {
-            revolution.z += revSensitivity;
-        }
-
-        //calculate for the rotation of the point light
-        glm::mat4 transformation_matrix = glm::mat4(1.0f);
-        //rotate the point light along the x-axis
-        transformation_matrix = glm::rotate(transformation_matrix, glm::radians(revolution.x), glm::normalize(glm::vec3(1.0f, 0.0f, 0.0f)));
-        //rotate the point light along the y-axis
-        transformation_matrix = glm::rotate(transformation_matrix, glm::radians(revolution.y), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)));
-        //rotate the point light along the z-axis
-        transformation_matrix = glm::rotate(transformation_matrix, glm::radians(revolution.z), glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f)));
-        //calculate for the new position of the matrix by applying the transformation matrix to the initial position of the point light
-        position = transformation_matrix * glm::vec4(initPosition, 1.0);
-
-
-        if (key == GLFW_KEY_SPACE) {
-            isActive = !isActive; //select and deselect the point light
-            //change the color to green (selected)
-            if (isActive) {
-                lightColor = glm::vec3(0.5f, 1.0f, 0.5f);
-            }
-            //change the color to white (not selected)
-            else {
-                lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-            }
-        }
 
         float lightSensitivity = 0.025;
         //increase the light intensity

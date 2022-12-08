@@ -7,7 +7,7 @@ public:
     float specStr; //stores the value of the specular strength
     float specPhong; //stores the value of the specular phong
     glm::vec3 lightColor; //stores the value of the light color
-    float lightIntensity;
+    float lightIntensity; //stores the value of the light intensity
 
     //constructor for the light class
     Light(float ambientStr, float specStr, float specPhong, glm::vec3 lightColor, float lightIntensity) {

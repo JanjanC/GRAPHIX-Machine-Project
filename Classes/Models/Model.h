@@ -163,9 +163,4 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0); //finish modifying the buffer
         glBindVertexArray(0); //finish modifying the vao
     }
-
-    void updateField(glm::vec3 position, glm::vec3 theta) {
-        this->position = position;
-        this->theta = theta;
-    }
 }; 

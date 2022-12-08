@@ -40,13 +40,11 @@ class Environment {
 
 public:
     Player* mainModel;
-    Model* planeModel;
     Model* otherModel;
     Skybox *skybox;
     SpotLight* spotLight;
     DirectionalLight* directionalLight;
     Shader* playerShader;
-    Shader* planeShader;
     Shader* modelShader;
     Shader* skyboxShader;
     PerspectiveCamera* thirdPerspectiveCamera;
@@ -62,9 +60,6 @@ public:
         //load the shader for the players
         playerShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
 
-        //load the shader for the plane
-        planeShader = new Shader("Shaders/plane.vert", "Shaders/plane.frag");
-
         //load the shader for the models
         modelShader = new Shader("Shaders/model.vert", "Shaders/model.frag");
 
@@ -76,8 +71,6 @@ public:
         mainModel = new Player("3D/submarine.obj", glm::vec3(0, 0, 0), glm::vec3(0.001f, 0.001f, 0.001f), glm::vec3(0.0f, 0.0f, 0.0f));
         mainModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
         mainModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
-
-        planeModel = new Model("3D/plane.obj", glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 180.0f, 0.0f));
 
         otherModel = new Model("3D/bird.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         otherModel->loadTexture("3D/ayaya.png", *modelShader, "tex0");
@@ -136,20 +129,18 @@ public:
         skybox->setViewMatrix(*skyboxShader, activeCamera->viewMatrix);
         skybox->setProjectionMatrix(*skyboxShader, activeCamera->projectionMatrix);
 
-
-        planeModel->updateField(mainModel->position + mainModel->direction * 0.5f, mainModel->theta);
-        activeCamera->setViewMatrix(*planeShader);
-        activeCamera->setProjectionMatrix(*planeShader);
-
         //draws the objects on the screens
         //TODO: cleanup
         if (activeCamera == firstPerspectiveCamera) {
-            planeModel->draw(*planeShader);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_CONSTANT_COLOR, GL_CONSTANT_COLOR);
+            glBlendEquation(GL_FUNC_ADD);
+            glBlendColor(0.0f, 0.41f, 0.58f, 1.000);
         }
         else {
+            glDisable(GL_BLEND);
             mainModel->draw(*playerShader);
         }
-        planeModel->draw(*planeShader);
         otherModel->draw(*modelShader);
         skybox->draw(*skyboxShader);
     }
@@ -311,14 +302,7 @@ int main(void)
     //loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        //enable blending
-        glEnable(GL_BLEND);
-        //select a blending function
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        //select a blending equation
-        glBlendEquation(GL_FUNC_ADD);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);        
 
         //update the uniform values in the shaders and draw the object on the screen
         environment->updateScreen();

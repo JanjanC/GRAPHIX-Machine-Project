@@ -1,5 +1,5 @@
 //add glad and glfw libaries
-#include <glad/glad.h> 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 //define tinyobjloader implementation
@@ -85,6 +85,14 @@ public:
         model->loadTexture("3D/enemy_submarine_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        model = new Model("3D/seahorse.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/seahorse_texture.png", *modelShader, "tex0");
+        otherModels.push_back(model);
+
+        model = new Model("3D/whale_shark.obj", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/whale_shark_texture.png", *modelShader, "tex0");
+        otherModels.push_back(model);
+        
         model = new Model("3D/koi_fish.obj", glm::vec3(1.0f, 0.0f, 50.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/koi_fish_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
@@ -115,7 +123,7 @@ public:
         std::cout << "[SUBMARINE STATUS]\n";
         std::cout << "Current ocean depth: " << playerModel->position.y;
     }
-    
+
     //destructor for the environment class
     ~Environment() {
         //deallocates the objects from the memory
@@ -131,7 +139,7 @@ public:
     }
 
     //updates the uniform values of the shader files and draws the objects on the screen
-    void updateScreen() {        
+    void updateScreen() {
         firstPerspectiveCamera->updateFields(playerModel->position, playerModel->direction);
         thirdPerspectiveCamera->updateFields(playerModel->position);
 
@@ -156,8 +164,11 @@ public:
             playerModel->draw(*playerShader);
         }
         for (int i = 0; i < otherModels.size(); i++) {
-            otherModels[i]->draw(*modelShader);
+            /*otherModels[i]->draw(*modelShader);*/
+            ;
         }
+
+        otherModels[4]->draw(*modelShader);
 
 
         skybox->draw(*skyboxShader);
@@ -218,7 +229,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         if (environment->activeCamera == environment->firstPerspectiveCamera) {
             environment->activeCamera = environment->thirdPerspectiveCamera;
             environment->lastPerspective = 3;
-        } 
+        }
         else
         if (environment->activeCamera == environment->thirdPerspectiveCamera) {
             environment->activeCamera = environment->firstPerspectiveCamera;
@@ -230,7 +241,7 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         /* Toggle off - the current camera is in ortho already */
         if (environment->activeCamera == environment->orthoCamera) {
             switch (environment->lastPerspective) {
-                case 1: 
+                case 1:
                     environment->activeCamera = environment->firstPerspectiveCamera;
                     break;
                 case 3:
@@ -242,13 +253,13 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         else {
             /* Set the position and target of ortho be on top of the player */
             environment->orthoCamera->position.x = environment->playerModel->position.x;
-            environment->orthoCamera->target.x = environment->playerModel->position.x;            
+            environment->orthoCamera->target.x = environment->playerModel->position.x;
             environment->orthoCamera->position.z = environment->playerModel->position.z - 0.1f; // 0.1f subtraction to avoid looking straight down exactly
             environment->orthoCamera->target.z = environment->playerModel->position.z;
 
             /* Set the camera to switch to ortho */
             environment->activeCamera = environment->orthoCamera;
-        }   
+        }
     }
 
     /* Escaping the game */
@@ -304,7 +315,7 @@ int main(void)
     //loop until the user closes the window
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //update the uniform values in the shaders and draw the object on the screen
         environment->updateScreen();

@@ -279,6 +279,10 @@ void Mouse_Callback(GLFWwindow* window, double xPos, double yPos) {
     if (environment->activeCamera == environment->thirdPerspectiveCamera) {
         environment->thirdPerspectiveCamera->processMouse(xPos, yPos);
     }
+
+    if(environment->activeCamera == environment->orthoCamera) {
+        environment->orthoCamera->processMouse(xPos, yPos);
+    }
 }
 
 int main(void)

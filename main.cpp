@@ -54,6 +54,8 @@ public:
     int cameraIndex = 0;
     int lastPerspective = 3;
 
+    Player* testPlane;
+
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
 
@@ -98,6 +100,11 @@ public:
         otherModels.push_back(model);
 
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
+
+        testPlane = new Player("3D/plane.obj", glm::vec3(0, 0, 0), glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+        testPlane->loadTexture("3D/brickwall.jpg", *playerShader, "tex0");
+        testPlane->loadTexture("3D/brickwall_normal.jpg", *playerShader, "norm_tex");
+
 
         //create a point light and load the sphere object
         //3D model for sphere taken from the MIT website (http://web.mit.edu/djwendel/www/weblogo/shapes/basic-shapes/sphere/sphere.obj)
@@ -167,6 +174,8 @@ public:
             /*otherModels[i]->draw(*modelShader);*/
             ;
         }
+
+        testPlane->draw(*playerShader);
 
         otherModels[4]->draw(*modelShader);
 

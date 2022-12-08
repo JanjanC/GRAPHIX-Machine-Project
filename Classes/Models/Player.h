@@ -313,7 +313,6 @@ public:
 
     //process keyboard inputs and update the object attributes
     void processKeyboard(int key) {
-        printf("%lf %lf %lf\n", direction.x, direction.y, direction.z);
         float rot_sensitivity = 1.0f;
         float vert_sensitivity = 0.2f;
         float horz_sensitivity = 0.4f;

@@ -85,6 +85,10 @@ public:
         model->loadTexture("3D/enemy_submarine_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        model = new Model("3D/koi_fish.obj", glm::vec3(1.0f, 0.0f, 50.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model->loadTexture("3D/koi_fish_texture.png", *modelShader, "tex0");
+        otherModels.push_back(model);
+
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
         //create a point light and load the sphere object

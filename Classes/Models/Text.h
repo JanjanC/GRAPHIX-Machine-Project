@@ -77,6 +77,7 @@ public:
 
             //extract the character
             char character = text.at(i);
+            printf("%d\n", character);
             float uv_x = (character % 16) / 16.0f;
             float uv_y = (character / 16) / 16.0f;
 
@@ -88,18 +89,21 @@ public:
             //upper left texture and uv
             fullVertexData.push_back(vertex_up_left.x);
             fullVertexData.push_back(vertex_up_left.y);
+            fullVertexData.push_back(0);
             fullVertexData.push_back(uv_up_left.x);
             fullVertexData.push_back(uv_up_left.y);
 
             //down left texture and uv
             fullVertexData.push_back(vertex_down_left.x);
             fullVertexData.push_back(vertex_down_left.y);
+            fullVertexData.push_back(0);
             fullVertexData.push_back(uv_down_left.x);
             fullVertexData.push_back(uv_down_left.y);
 
             //upper right texture and uv
             fullVertexData.push_back(vertex_up_right.x);
             fullVertexData.push_back(vertex_up_right.y);
+            fullVertexData.push_back(0);
             fullVertexData.push_back(uv_up_right.x);
             fullVertexData.push_back(uv_up_right.y);
 
@@ -107,18 +111,21 @@ public:
             //down right texture and uv
             fullVertexData.push_back(vertex_down_right.x);
             fullVertexData.push_back(vertex_down_right.y);
+            fullVertexData.push_back(0);
             fullVertexData.push_back(uv_down_right.x);
             fullVertexData.push_back(uv_down_right.y);
 
             //upper right texture and uv
             fullVertexData.push_back(vertex_up_right.x);
             fullVertexData.push_back(vertex_up_right.y);
+            fullVertexData.push_back(0);
             fullVertexData.push_back(uv_up_right.x);
             fullVertexData.push_back(uv_up_right.y);
 
             //down left texture and uv
             fullVertexData.push_back(vertex_down_left.x);
             fullVertexData.push_back(vertex_down_left.y);
+            fullVertexData.push_back(0);
             fullVertexData.push_back(uv_down_left.x);
             fullVertexData.push_back(uv_down_left.y);
         }
@@ -140,10 +147,10 @@ public:
         //vertex x, y
         glVertexAttribPointer(
             0,
-            2,
+            3,
             GL_FLOAT,
             GL_FALSE,
-            4 * sizeof(GL_FLOAT),
+            5 * sizeof(GL_FLOAT),
             (void*)0
         );
         glEnableVertexAttribArray(0); //enable vertex attribute 0
@@ -154,7 +161,7 @@ public:
             2,
             GL_FLOAT,
             GL_FALSE,
-            4 * sizeof(GL_FLOAT),
+            5 * sizeof(GL_FLOAT),
             (void*)2
         );
         glEnableVertexAttribArray(2); //enable vertex attribute 2
@@ -172,6 +179,6 @@ public:
         glBindTexture(GL_TEXTURE_2D, texture);
         glUniform1i(tex0Address, 0);
 
-        glDrawArrays(GL_TRIANGLES, 0, fullVertexData.size() / 4);
+        glDrawArrays(GL_TRIANGLES, 0, fullVertexData.size() / 5);
     }
 };

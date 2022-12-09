@@ -27,12 +27,8 @@ public:
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
-
-
-        text = new Text("3D/text.png");
+        text = new Text("3D/Font.png");
         textShader = new Shader("Shaders/text.vert", "Shaders/text.frag");
-
-
 
         //load the shader for the players
         playerShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
@@ -165,7 +161,11 @@ public:
             modelShader->useProgram();
             glUniform1i(glGetUniformLocation(modelShader->shaderProgram, "useTexture"), true);
             //disable blending and draw the player model
-            glDisable(GL_BLEND);
+            glEnable(GL_BLEND);
+            //select a blending function
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            //select a blending equation
+            glBlendEquation(GL_FUNC_ADD);
             playerModel->draw(*playerShader);
         }
 

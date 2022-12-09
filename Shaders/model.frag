@@ -169,7 +169,7 @@ void main () {
     if (useTexture) {
         pixelColor = texture(tex0, texCoord);
     } else {
-        pixelColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+        pixelColor = vec4(0.0f, 1.0f, 0.25f, 1.0f);
     }
 
     FragColor = vec4(total, 1.0f) * pixelColor;

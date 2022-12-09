@@ -42,6 +42,8 @@ uniform SpotLight spotLight; //point light
 
 uniform vec3 cameraPos; //camera position
 
+uniform bool useTexture;
+
 in vec2 texCoord; //texture coordinates
 in vec3 normCoord; //normal coordinates
 in vec3 fragPos; //fragment position
@@ -160,5 +162,12 @@ void main () {
     //calculate spot light
     total += calculateSpotLight(spotLight);
 
-    FragColor = vec4(total, 1.0f) * texture(tex0, texCoord);
+    vec4 pixelColor;
+    if (useTexture) {
+        pixelColor = texture(tex0, texCoord);
+    } else {
+        pixelColor = vec4(0.0f, 0.41f, 0.58f, 1.0f);
+    }
+
+    FragColor = vec4(total, 1.0f) * pixelColor;
 }

@@ -140,6 +140,7 @@
     <ClInclude Include="Classes\Cameras\MyCamera.h" />
     <ClInclude Include="Classes\Cameras\OrthoCamera.h" />
     <ClInclude Include="Classes\Cameras\PerspectiveCamera.h" />
+    <ClInclude Include="Classes\Environment.h" />
     <ClInclude Include="Classes\Light\DirectionalLight.h" />
     <ClInclude Include="Classes\Light\Light.h" />
     <ClInclude Include="Classes\Light\SpotLight.h" />

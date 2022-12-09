@@ -103,7 +103,7 @@ public:
         firstPerspectiveCamera = new PerspectiveCamera(playerModel->position, playerModel->position + 5.0f * playerModel->direction, glm::vec3(0, 1.0f, 0), 0.1f, 100.0f);
 
         //create an orthographic camera looking down from the top
-        orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, 0.1f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0), -100.0f, 100.0f);
+        orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, 0.1f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0), 0.0f, 200.0f);
 
         std::cout << "[ CAMERAS LOADED ]... \n\n";        
 

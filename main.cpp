@@ -171,7 +171,7 @@ public:
             glEnable(GL_BLEND);
             glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
             glBlendEquation(GL_FUNC_ADD);
-            glBlendColor(0.0f, 0.41f, 0.58f, 1.0f);
+            glBlendColor(0.0f, 1.0f, 0.0f, 1.0f);
         }
         else {
             modelShader->useProgram();

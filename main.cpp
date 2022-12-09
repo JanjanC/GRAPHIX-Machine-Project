@@ -37,7 +37,7 @@
 #include "Classes/Light/SpotLight.h"
 
 // Environment Class
-#include "Classes/Models/Environment.h"
+#include "Classes/Environment.h"
 
 //----------GLOBAL VARIABLES----------
 Environment* environment; //pointer to the environment object

@@ -31,38 +31,50 @@ public:
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
 
         //load the main model and its textures
+        /* [Source] Submarine (Player): https://www.cgtrader.com/free-3d-models/watercraft/other/yellow-submarine-a96577f5-f213-4491-8893-bfc08e3f37ae */
         playerModel = new Player("3D/submarine.obj", glm::vec3(0, -10, 0), glm::vec3(0.00375f, 0.00375f, 0.00375f), glm::vec3(0.0f, 180.0f, 0.0f));
         playerModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
         playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
 
         Model* model;
         //load the megalodon model and its textures
+        /* [Source] Megalodon: https://free3d.com/3d-model/megalodon-battlefield-4-67390.html */
         model = new Model("3D/megalodon.obj", glm::vec3(40.0f, -30.0f, -75.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(-25.0f, 225.0f, -25.0f));
         model->loadTexture("3D/megalodon_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        //load the turtle model and its textures
+        /* [Source] Turtle: https://3dsky.org/3dmodels/show/cherepakha_3 */
         model = new Model("3D/turtle.obj", glm::vec3(0.0f, -30.0f, -100.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(-25.0f, 225.0f, 0.0f));
         model->loadTexture("3D/turtle_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        //load the submarine enemy model and its textures
+        /* [Source] Submarine Enemy: https://www.cgtrader.com/free-3d-models/watercraft/military-watercraft/low-polygon-indonesian-submarine */
         model = new Model("3D/enemy_submarine.obj", glm::vec3(40.0f, -80.0f, -20.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(45.0f, 45.0f, 0.0f));
         model->loadTexture("3D/enemy_submarine_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
         //load the seahore model and its textures
+        /* [Source] Seahorse: https://sketchfab.com/3d-models/seahorse-952f35a14f2e4fc0937325ecc09f8175 */
         model = new Model("3D/seahorse.obj", glm::vec3(-45.0f, -20.0f, -75.0f), glm::vec3(0.03f, 0.03f, 0.03f), glm::vec3(0.0f, 25.0f, 0.0f));
         model->loadTexture("3D/seahorse_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        //load the starfish model and its textures
+        /* [Source] Starfish: https://sketchfab.com/3d-models/low-poly-starfish-4a763a1c211044089b1315f9f025b027 */
         model = new Model("3D/starfish.obj", glm::vec3(0.0f, -5.0f, -50.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 25.0f, 25.0f));
         model->loadTexture("3D/starfish_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        //load the koi model and its textures
+        /* [Source] Koi: https://sketchfab.com/3d-models/koi-fish-f7e2e4858f2f438aa2832566220199f4 */
         model = new Model("3D/koi.obj", glm::vec3(-65.0f, 0.0f, -50.0f), glm::vec3(0.1f, 0.1f, 0.1f), glm::vec3(0.0f, 0.0f, 0.0f));
         model->loadTexture("3D/koi_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
-        //load the skybox
+        //load the underwater skybox
+        /* [Source] Underwater Skybox: https://jkhub.org/files/file/3216-underwater-skybox/ */
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
         //create a spotlight in front of the submarine

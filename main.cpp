@@ -166,6 +166,7 @@ public:
         //draws the objects on the screens
         if (activeCamera == firstPerspectiveCamera) {
             //set the objects to a shade of color
+            modelShader->useProgram();
             glUniform1i(glGetUniformLocation(modelShader->shaderProgram, "useTexture"), false);
             glEnable(GL_BLEND);
             glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
@@ -173,6 +174,7 @@ public:
             glBlendColor(0.0f, 0.41f, 0.58f, 1.0f);
         }
         else {
+            modelShader->useProgram();
             glUniform1i(glGetUniformLocation(modelShader->shaderProgram, "useTexture"), true);
             //disable blending and draw the player model
             glDisable(GL_BLEND);

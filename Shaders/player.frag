@@ -32,7 +32,8 @@ struct SpotLight {
     float constant; //constant factor for attentuation
     float linear; //linear factor for attentuation
     float quadratic; //quadratic factor for attentuation
-    float cutoff;
+    float cutoff; //cutoff for the spotlight
+    float outerCutoff; //outer cutoff for the spotlight
 };
 
 uniform sampler2D tex0; //index of the texture
@@ -155,12 +156,14 @@ vec3 calculateSpotLight(SpotLight light) {
     diffuse *= light.intensity;
     specular *= light.intensity;
 
-    float theta = dot(lightDir, normalize(-light.direction));
-    if (theta > light.cutoff) {
-        return ambient + diffuse + specular; 
-    } else {
-        return ambient;
-    }
+    //spotlight with soft edges
+    float theta = dot(lightDir, normalize(-light.direction)); 
+    float epsilon = (light.cutoff - light.outerCutoff);
+    float scale = clamp((theta - light.outerCutoff) / epsilon, 0.0, 1.0); 
+    diffuse  *= scale;
+    specular *= scale;
+
+    return ambient + diffuse + specular; 
 }
 
 void main () {

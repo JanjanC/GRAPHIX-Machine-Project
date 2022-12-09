@@ -103,7 +103,7 @@ public:
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
 
         //create a spotlight in front of the submarine
-        spotLight = new SpotLight(0.05f, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, playerModel->position + playerModel->direction * 1.0f, glm::vec3(0, 0, -1), 12.5);
+        spotLight = new SpotLight(0.05f, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, playerModel->position + playerModel->direction * 1.0f, glm::vec3(0, 0, -1), 25.0f, 35.0f);
 
         //create a directional light coming from the top
         directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
@@ -206,6 +206,7 @@ public:
         spotLight->setLightDirection(shader);
         spotLight->setAttenuationConstants(shader);
         spotLight->setCutoff(shader);
+        spotLight->setOuterCutoff(shader);
 
         //updates the uniform values of the directional light
         directionalLight->setAmbientStr(shader);

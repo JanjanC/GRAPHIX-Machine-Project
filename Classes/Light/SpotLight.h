@@ -6,7 +6,7 @@ class SpotLight : public Light {
 public:
     glm::vec3 position;
     glm::vec3 direction;
-    float cutoff;
+    float cutoff, outerCutoff;
 
     //fixed values for attenuation
     float constant;
@@ -16,12 +16,13 @@ public:
     int intensityLevel;
 
     //constructor for the point light class
-    SpotLight(float ambientStr, float specStr, float specPhong, glm::vec3 lightColor, float lightIntensity, glm::vec3 position, glm::vec3 direction, float cutoff) :
+    SpotLight(float ambientStr, float specStr, float specPhong, glm::vec3 lightColor, float lightIntensity, glm::vec3 position, glm::vec3 direction, float cutoff, float outerCutoff) :
         Light(ambientStr, specStr, specPhong, lightColor, lightIntensity) {
         
         this->position = position;
         this->direction = direction;
         this->cutoff = cutoff;
+        this->outerCutoff = outerCutoff;
         
         // values from https ://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
         constant = 1.0f;
@@ -123,6 +124,15 @@ public:
         //set the value of the quadratic value
         unsigned int cutoffLoc = glGetUniformLocation(shader.shaderProgram, "spotLight.cutoff");
         glUniform1f(cutoffLoc, glm::cos(glm::radians(cutoff)));
+    }
+
+    //set the value of the cutoff in the shader
+    void setOuterCutoff(Shader shader) {
+        shader.useProgram();
+
+        //set the value of the quadratic value
+        unsigned int outerCutoffLoc = glGetUniformLocation(shader.shaderProgram, "spotLight.outerCutoff");
+        glUniform1f(outerCutoffLoc, glm::cos(glm::radians(outerCutoff)));
     }
 
     //process keyboard inputs and update the object attributes

@@ -20,6 +20,8 @@ public:
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
+        system("Color 0A");
+        std::cout << "############ SETTING UP NO MAN'S SUBMARINE #############\n\n";
 
         //load the shader for the players
         playerShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
@@ -30,11 +32,15 @@ public:
         //load the shader for the skybox
         skyboxShader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
 
+        std::cout << "[ SHADERS LOADED ]... \n";
+
         //load the main model and its textures
         /* [Source] Submarine (Player): https://www.cgtrader.com/free-3d-models/watercraft/other/yellow-submarine-a96577f5-f213-4491-8893-bfc08e3f37ae */
         playerModel = new Player("3D/submarine.obj", glm::vec3(0, -10, 0), glm::vec3(0.00375f, 0.00375f, 0.00375f), glm::vec3(0.0f, 180.0f, 0.0f));
         playerModel->loadTexture("3D/submarine_texture.png", *playerShader, "tex0");
         playerModel->loadTexture("3D/submarine_normal.png", *playerShader, "norm_tex");
+
+        std::cout << "[ PLAYER LOADED ]... \n";
 
         Model* model;
         //load the megalodon model and its textures
@@ -73,15 +79,21 @@ public:
         model->loadTexture("3D/koi_texture.png", *modelShader, "tex0");
         otherModels.push_back(model);
 
+        std::cout << "[ MODELS LOADED ]... \n";
+
         //load the underwater skybox
         /* [Source] Underwater Skybox: https://jkhub.org/files/file/3216-underwater-skybox/ */
         skybox = new Skybox("Skybox/uw_rt.jpg", "Skybox/uw_lf.jpg", "Skybox/uw_up.jpg", "Skybox/uw_dn.jpg", "Skybox/uw_ft.jpg", "Skybox/uw_bk.jpg");
+
+        std::cout << "[ SKYBOX LOADED ]... \n";
 
         //create a spotlight in front of the submarine
         spotLight = new SpotLight(0.05f, 1.0f, 16.0f, glm::vec3(1, 1, 1), 0.5f, playerModel->position + playerModel->direction * 1.0f, glm::vec3(0, 0, -1), 25.0f, 35.0f);
 
         //create a directional light coming from the top
         directionalLight = new DirectionalLight(0.1f, 0.5f, 16.0f, glm::vec3(1, 1, 1), 1.0f, glm::vec3(0, -1, 0));
+
+        std::cout << "[ LIGHTING LOADED ]... \n";
 
         //create a third person perspective camera
         thirdPerspectiveCamera = new PerspectiveCamera(playerModel->position - 5.0f * playerModel->direction, playerModel->position, glm::vec3(0, 1.0f, 0), 0.1f, 40.0f);
@@ -92,10 +104,13 @@ public:
         //create an orthographic camera looking down from the top
         orthoCamera = new OrthoCamera(glm::vec3(0.0f, 10.0f, 0.1f), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0), -100.0f, 100.0f);
 
+        std::cout << "[ CAMERAS LOADED ]... \n\n";        
+
         //set the third person perspective camera as the active camera
         activeCamera = thirdPerspectiveCamera;
 
-        // print the initial info of the submarine
+        // print the initial info of the submarine        
+        std::cout << "##################### SETUP SUCCESS ######################\n\n";
         std::cout << "Submarine system initialization... COMPLETE\n";
         std::cout << "Preparing for underwater exploration...\n\n";
         std::cout << "[SUBMARINE STATUS]\n";

@@ -150,6 +150,7 @@
     <ClInclude Include="Classes\Models\Player.h" />
     <ClInclude Include="Classes\Models\Shader.h" />
     <ClInclude Include="Classes\Models\Skybox.h" />
+    <ClInclude Include="Classes\Models\Text.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>

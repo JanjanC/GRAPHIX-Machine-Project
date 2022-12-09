@@ -1,5 +1,8 @@
 #pragma once
 
+// script for rendering text on screen
+#include "Classes/Models/Text.h"
+
 class Environment {
 
 public:
@@ -17,9 +20,19 @@ public:
     MyCamera* activeCamera;
     int lastPerspective = 3;
     bool isMouseClicked = false;
+    Text* text;
+    Shader* textShader;
+    int x = 0;
+    int y = 0;
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
+
+
+        text = new Text("3D/text.png");
+        textShader = new Shader("Shaders/text.vert", "Shaders/text.frag");
+
+
 
         //load the shader for the players
         playerShader = new Shader("Shaders/player.vert", "Shaders/player.frag");
@@ -96,10 +109,10 @@ public:
         activeCamera = thirdPerspectiveCamera;
 
         // print the initial info of the submarine
-        std::cout << "Submarine system initialization... COMPLETE\n";
+        /*std::cout << "Submarine system initialization... COMPLETE\n";
         std::cout << "Preparing for underwater exploration...\n\n";
         std::cout << "[SUBMARINE STATUS]\n";
-        std::cout << "Current ocean depth: " << playerModel->position.y;
+        std::cout << "Current ocean depth: " << playerModel->position.y;*/
     }
 
     //destructor for the environment class
@@ -163,6 +176,8 @@ public:
 
         //draw the skybox
         skybox->draw(*skyboxShader);
+
+        text->printText2D(*textShader, "Hello please work", x, y, 30);
     }
 
     //updates the uniform values in the shader file

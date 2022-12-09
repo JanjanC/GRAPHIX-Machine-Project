@@ -52,6 +52,7 @@ public:
     OrthoCamera* orthoCamera;
     MyCamera* activeCamera;
     int lastPerspective = 3;
+    int useTexture = 1;
     bool isMouseClicked = false;
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
@@ -165,15 +166,15 @@ public:
 
         //draws the objects on the screens
         if (activeCamera == firstPerspectiveCamera) {
-            //set the objects to a shade of color
-            glUniform1i(glGetUniformLocation(modelShader->shaderProgram, "useTexture"), false);
+            //set the objects to a shade of color            
+            useTexture = 0;
             glEnable(GL_BLEND);
             glBlendFunc(GL_CONSTANT_COLOR, GL_CONSTANT_COLOR);
             glBlendEquation(GL_FUNC_ADD);
             glBlendColor(0.0f, 0.41f, 0.58f, 1.0f);
         }
         else {
-            glUniform1i(glGetUniformLocation(modelShader->shaderProgram, "useTexture"), true);
+            useTexture = 1;
             //disable blending and draw the player model
             glDisable(GL_BLEND);
             playerModel->draw(*playerShader);
@@ -214,6 +215,11 @@ public:
         directionalLight->setLightColor(shader);
         directionalLight->setLightIntensity(shader);
         directionalLight->setLightDirection(shader);
+
+        //updates the texture condition
+        for (int i = 0; i < otherModels.size(); i++) {
+            otherModels[i]->setTexture(shader, useTexture);
+        }
     }
 };
 

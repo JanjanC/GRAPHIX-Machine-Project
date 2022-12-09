@@ -42,7 +42,7 @@ uniform SpotLight spotLight; //point light
 
 uniform vec3 cameraPos; //camera position
 
-uniform bool useTexture;
+uniform int useTexture;
 
 in vec2 texCoord; //texture coordinates
 in vec3 normCoord; //normal coordinates
@@ -163,7 +163,7 @@ void main () {
     total += calculateSpotLight(spotLight);
 
     vec4 pixelColor;
-    if (useTexture) {
+    if (useTexture == 1) {
         pixelColor = texture(tex0, texCoord);
     } else {
         pixelColor = vec4(0.0f, 0.41f, 0.58f, 1.0f);

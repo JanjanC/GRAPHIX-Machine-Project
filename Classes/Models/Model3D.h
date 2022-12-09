@@ -120,4 +120,12 @@ public:
         //draw the model
         glDrawArrays(GL_TRIANGLES, 0, fullVertexData.size() / attribCount);
     }
+
+    void setTexture(Shader shader, int useTexture) {
+        shader.useProgram();
+
+        //set the value of the cameraPos in the shader
+        unsigned int useTextureLoc = glGetUniformLocation(shader.shaderProgram, "useTexture");
+        glUniform1i(useTextureLoc, useTexture);
+    }
 };

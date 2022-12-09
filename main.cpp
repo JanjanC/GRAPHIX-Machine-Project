@@ -58,20 +58,20 @@ void Key_Callback(GLFWwindow* window, int key, int scanCode, int action, int mod
         }
     }
 
-    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-        environment->x += 0.1;
+    if (key == GLFW_KEY_W) {
+        environment->x += 1;
     }
 
-    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-        environment->x -= 0.1;
+    if (key == GLFW_KEY_S) {
+        environment->x -= 1;
     }
 
-    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-        environment->y += 0.1;
+    if (key == GLFW_KEY_A) {
+        environment->y += 1;
     }
 
-    if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-        environment->y -= 0.1;
+    if (key == GLFW_KEY_D) {
+        environment->y -= 1;
     }
 
     // cycle the light intensity

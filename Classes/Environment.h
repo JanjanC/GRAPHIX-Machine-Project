@@ -22,8 +22,8 @@ public:
     bool isMouseClicked = false;
     Text* text;
     Shader* textShader;
-    int x = 0;
-    int y = 0;
+    float x = 0;
+    float y = 0;
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
@@ -176,8 +176,8 @@ public:
 
         //draw the skybox
         skybox->draw(*skyboxShader);
-
-        text->printText2D(*textShader, "Hello please work", x, y, 30);
+        printf("%lf %lf\n", x, y);
+        text->printText2D(*textShader, "abcdef", x, y, 48);
     }
 
     //updates the uniform values in the shader file

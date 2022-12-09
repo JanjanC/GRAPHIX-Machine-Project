@@ -20,6 +20,7 @@ public:
 
     //constructor for the environment class which initializes the objects necessary to render the program such as the models, lights, shaders, and cameras
     Environment() {
+        // set the color of command line text to be green
         system("Color 0A");
         std::cout << "############ SETTING UP NO MAN'S SUBMARINE #############\n\n";
 
@@ -182,7 +183,6 @@ public:
 
     //updates the uniform values in the shader file
     void updateShader(Shader shader) {
-
         //updates the uniform values of the active camera
         activeCamera->setViewMatrix(shader);
         activeCamera->setProjectionMatrix(shader);
